@@ -1,0 +1,4893 @@
+;------------------------------------------------------------------------------------------
+;ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
+;ÑÑÑÑÑ                                                                                  ÑÑÑÑÑ
+;ÑÑÑÑÑ Este es el fichero de inicio de la librería para DAAD Reborn Compiler en español ÑÑÑÑÑ
+;ÑÑÑÑÑ                                                                                  ÑÑÑÑÑ
+;ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
+
+; Por favor no quites las eñes en el recuadro justo encima, están ahí para que notes fácil-
+; mente si abres el fichero con una codificación que no es la correcta (ISO-8859-1 o Win1252)
+
+; --- Por favor no quites este código, es importante para controlar los distintos objetivos
+
+;#ifdef "SPLIT"
+;#define splitModeON 1
+;#endif
+
+#ifdef "tape48"
+#define tape 1
+#endif
+
+#ifndef "tape"
+#ifndef "st"
+#ifndef "amiga"
+#ifndef "zx128"
+#ifndef "next"
+    #extern "MALUVA"
+#endif
+#endif
+#endif
+#endif
+#endif
+
+#ifdef "oldnext"
+    #extern "MALUVA"
+#endif
+
+#ifdef "zx128"
+#define nativeraster 1
+#endif
+
+#ifdef "html"
+#define nativeraster 1
+#endif
+
+#ifdef "pcw"
+#define nativeraster 1
+#endif
+
+#ifdef "amiga"
+#define nativeraster 1
+#endif
+
+#ifdef "pc"
+#define nativeraster 1
+#endif
+
+#ifdef "st"
+#define nativeraster 1
+#endif
+
+#ifdef "uno"
+#int "MLV_UNO_INT.BIN"
+#define canBoostSpeed 1
+#endif
+
+#ifdef "next"
+#define canBoostSpeed 1
+#endif
+
+#ifdef "cpc"
+#int "MLV_CPC_INT.BIN"
+#endif
+
+#ifdef "splitModeON"
+#echo "La mï¿½quina destino usarï¿½ split mode"
+#endif
+
+#ifdef "canBoostSpeed"
+#echo "La mï¿½quina destino tiene modo turbo"
+#endif
+
+; --- Por favor no quites este cï¿½digo de arriba, es importante para controlar los distintos objetivos
+
+
+; System flags 0-63
+#define fDark               0
+#define fObjectsCarried     1
+
+#define fDarkF              28
+#define fGFlags             29     ; This is best tested using HASAT GMODE
+#define fScore              30
+#define fTurns              31    ; 2 bytes
+#define fTurnsHi            32
+
+#define fVerb               33
+#define fNoun               34
+#define fAdject1            35
+#define fAdverb             36
+#define fMaxCarr            37
+#define fPlayer             38
+#define fStream             41
+#define fPrompt             42
+#define fPrep               43
+#define fNoun2              44
+#define fAdject2            45
+#define fCPronounNoun       46
+#define fCPronounAdject     47
+#define fTimeout            48
+#define fTimeoutFlags       49
+#define fDoallObjNo         50
+#define fRefObject          51
+#define fStrength           52
+#define fObjFlags           53
+#define fRefObjLoc          54
+#define fRefObjWeight       55
+#define fRefObjIsContainer  56
+#define fRefObjisWearable   57
+#define fRefObjAttr1        58
+#define fRefObjAttr2        59
+#define fInkeyKey1          60
+#define fInkeyKey2          61
+#define fScreenMode         62     ; 2=Text, 4=CGA, 13=EGA, 141=VGA
+#define fCurrentWindow      63     ; Which window is active at the moment
+
+; Attr flags for HASAT/HASNAT
+#define WEARABLE  23            ;Current object is wearable
+#define CONTAINER 31            ;Current object is a container
+#define LISTED    55            ;Objects - listed by LISTOBJ etc
+#define OA_CLIST  54            ; - continous list
+#define OO_CLIST  64
+#define TIMEOUT   87            ;If Timeout last frame
+#define IA_RBUF   85            ;Input - recall buffer
+#define IO_RBUF   32
+#define IA_PINP   84            ; - reprint in stream
+#define IO_PINP   16
+#define IA_CSTR   83            ; - clear stream
+#define IO_CSTR   8
+#define IA_TAKEY  82            ; - timeout on any key
+#define IO_TAKEY  4
+#define IA_TMORE  81            ; - timeout on More...
+#define IO_TMORE  2
+#define IA_TSTAR  80            ; - timeout at start of input
+#define IO_TSTAR  1
+#define GMODE     247           ;Graphics - available
+#define GA_MDRW   246           ; - Invisible draw (drawstring)
+#define GO_MDRW   64
+#define GA_POFF   245           ; - Pictures OFF (drawstring)
+#define GO_POFF   32
+#define GA_WKEY   244           ; - Wait after drawing (drawstring)
+#define GO_WKEY   16
+#define GA_CBOR   243           ; - Change BORDER (drawstring)
+#define GO_CBOR   8
+#define MOUSE     240           ;mouse available (!DRAW only)
+
+;-------------------------------------------------------------
+
+;--- RPGEngine -------------------------------
+; Nothing to translae here.
+
+#define HP_PER_LEVEL 8
+#define INITIAL_HP 20
+#define PX_PER_LEVEL 100 ; Cada 100 puntos es un nivel
+#define GT_PX_LEVEL 99
+#define PX_MISSION 95
+#define INITIAL_DEFENSE 40 ; Defensa inicial
+#define ATTRIB_POINTS_PER_LEVEL 2 ; 3
+#define ATTRIB_PER_POINT 2 ; 1
+
+; Player flags
+#define fHP 251
+#define fHP_MAX 250
+#define fPX 249
+#define fLevel 248
+#define fWeapon 247
+#define fStrong 246
+#define fDexterity 245
+#define fConstitution 244
+#define fState 243
+#define fStateCounter 242
+#define fDefense 241
+#define fAttribPoints 240 ; Putnos para gastar en atributos
+
+; Attack accumulators
+#define fAC_PLAYER 234
+#define fAC_ENEMY 239
+; Avumulator every missed attack
+#define ATQ_INCREMENT 17 ; player
+#define ATQ_INCREMENT_ENEMY 10 ; enemy
+
+#define fHP_Enemy 238
+#define fEnemy_State 237
+#define fEnemy_Deads 235 ; 
+
+#define fLook 233
+
+; Estado de los enemigos
+#define ACTIVE 0
+#define PACIFIC 1
+#define DERRIVADO 2     ; El ataque del jugador pone este estado
+#define DERRIVADO_2 3   ; El ataque del enemigo pone este estado
+#define SKIP_ATTACK 4   ; Se salta el siguiente ataque sind ecir nada
+
+#define BONIFICADOR_DERRIBADO 20 ; Si el enemigo estÃ¡ derribado sumamos +20 al ataque.
+#define DAÑO_DERRIBADO 4 ; Si el enemigo estÃ¡ derribado sumamos +4 al daÃ±o.
+
+
+#define EXTRA_ATTACK_GIGANT 15
+#define EXTRA_damage_GIGANT 4
+#define DAÑO_FALLO_SALTO 2
+#define DAÑO_GIGANTE_HOSTIL 3
+#define DAÑO_CAPATAZ_HOSTIL 2
+#define EXTRA_ATTACK_PHALAX 20
+#define EXTRA_damage_PHALAX 6
+
+; States
+#define NO_STATE 0
+#define INVISIBLE 1
+#define APESTOSO 3
+#define EMBARRADO 4
+#define INVISIBLE_TIME 9 ; tIEMPO QUE PERMANECES INVISIBLE AL BEBER LA POCIÓN
+
+;---- Misiones
+;
+; flags of specifi locatios
+#define fGigante_Liberado 151 ; ABIERTO si liberaste al gigante
+#define fGiganteTeDaPaso 191 ; Hecho si ya el gigante te da paso
+#define fDead_Posesed 236 ;  Poseidos muertos para la misiÃ³n
+#define fBox 139
+#define fPossesed 154 
+#define LT_Constitution_To_Climb 2 ; 2 pùntos mínimo.
+#define GT_Constitution_To_Climb 1 ; 2 pùntos mínimo.
+#define fAgatha 146;  Si es HECHO, la he visto
+
+; Flags de Misiones
+#define fLOC_Paso 93
+#define fLOC_Aldea_Paso 95
+
+#define fLOC_Box 189 ; Bandera que me indica si puedo coger la caja o me quemo (=0)
+#define Dead_Posesed_Limit 6 ; Los que tienes que matar para dar por conluida la misisón.
+#define ALL_KILLED 155 ; Indica que has destruido una tribu.
+#define fMissiñons_Done 147 ; 
+#define ALL_MISSIONS 3
+#define MISSION_DONE 255 ; Este se usa solo con misiones individuales.
+#define TRIBE_DESTROYED 155
+
+
+; Nivel -1 porque es mayor estricto.
+#define LVL_CHARGE 1
+#define LVL_JUMP 3 ; A nivel 4
+#define LVL_DECAPITATE 6 ; A nivel 7
+; Para comprobar si no lo tienes
+#define LT_CHARGE 2
+#define LT_JUMP 4 ; A nivel 4
+#define LT_DECAPITATE 7 ; A nivel 7
+
+#define B_ARANA_BLANCA 201
+#define B_BEARSERKER 202
+#define B_CAPATAZ_TROLL 203
+#define B_ENGENDRO 204
+#define B_GIGANTE_DE_HIELO 205
+#define B_GOLEM_DE_HIELO 206
+#define B_SIRVIENTE_DE_NIEVE 207
+#define B_MANADA_DE_LOBOS 208
+#define B_POSEIDO 211
+#define B_POSEIDO_2 212
+#define B_PHALANX 213
+#define B_GUARD_TRIBE1 214
+#define B_CHIEF_TRIBE1 215
+#define B_UMBRA 216
+#define B_CHIEF_TRIBE2 217
+#define B_NEXT_ENEMY 218
+
+; DaÃ±o que hace el gigante si et agarra y te estampa contyra el suelo
+#define DAÑO_AGARRE_GIGANTE 8
+;
+#define DAÑO_DECAPITACION_ARAÑA 12
+;
+#define fPhalanx_Active 210 ; Si abiertoe s que está activado - No la uso
+
+; -- VWeapons & items
+#define HP_BAYA 14 ; HP que recuperas al comerte una balla
+#define Vegiga_Loc 62
+#define Lodo_Loc 98
+#define GT_Use_Achor 1  ; Dos puntos de fuerza al menos para usar Anchor
+#define LT_Use_Achor 3
+#define HP_POCION_CURACION 30
+
+;
+;--- Commons -------------------------------
+
+; Objects
+#define NOTCREATED 252
+#define DESTROYED 140 ; Nunca entro en esta LOC
+
+; Creatures Constants
+#define OFFSET_ENEMIES 70 ; Flag = LOC + OFFSET
+#define LIMITE_FLOC 160 ; El Ãºltimo flag / loc a usar es 230 ; Esto es el LOC
+#define LAST_ENEMY 200 ; Above is an enemy. first enemy is 201
+#define LT_ENEMY 201 ; Por debajo, no hay enemigo
+
+
+; LOC contents
+#define ABIERTO 2 ; Algo cerrado en esa LOC
+#define CERRADO 3 ; Algo abierto en esa LOC
+#define EMPTY 0
+#define HECHO 4 ; Algo hecho
+#define GT_ARBUSTO 99 ;  Sin usar
+#define ARBUSTOBAYA 100 ; Aquí hay una rbisto con gaya
+#define ARBUSTONOBAYA 101 ; Aquí hay una rbusto que no tiene baya
+#define LT_ARBUSTO 102 ;  Sin usar
+
+; Flags 2 to 27 are not actually used
+#define fTMP0 2
+#define fTMP1 3
+#define fTMP2 4 
+
+#define fPARAM0 10
+#define fPARAM1 11
+#define fPARAM2 12
+#define fPARAM3 13
+#define fRETURN0 14
+#define fRETURN1 15
+#define fLOC 27 
+
+;;; Process
+#define pExits 7
+#define pSetGet_Flag_Loc 8
+#define pCutScenes 9
+#define pChange_HP 10
+#define pAttack_Roll 11
+#define pInit_Player 12
+#define pAdd_PX 13
+#define pDynamic_Description 14
+#define pCheck_State 15
+#define pStatus_Bar 16
+#define pEstadisticas 17
+#define Print_Weapon_Name 18
+#define Check_Enemy 19
+#define Create_Enemy 20
+#define Enemy_Attacks 21
+#define Player_Attacks 22
+#define Enemy_Defense 23
+#define Weapon_Damage 24
+#define Damage_Enemy 25
+#define Dead_Enemy 26
+#define Set_Arbustos_Enemies 27
+#define Player_Charge 28
+#define Player_Decapitate 29
+#define Player_Jumps 30
+#define The_End 31
+#define CXheck_Possesed_Mission 32
+#define Set_WolfPack 33
+#define Historia_Hermano 34
+#define Show_Ending 35
+
+#define SET_FLAG 1
+#define CLEAR_FLAG 12
+#define SUMAR 1 
+#define RESTAR 2 
+#define PLAYER 10 
+#define ENEMY 20 
+#define DIRECT_DAMAGE 210
+
+/CTL    ;Sección de control
+_
+
+
+;------------------------------------------------------------------------------
+/VOC    ;Vocabulario
+;                       Movimiento: verbos y nombres < 14
+N       2       noun
+NORTE   2       noun
+S       3       noun
+SUR     3       noun
+E       4       noun
+ESTE    4       noun
+O       5       noun
+OESTE   5       noun
+NE      6       noun
+NO      7       noun
+SE      8       noun
+SO      9       noun
+AR      10      noun
+ARRIBA  10      noun
+SUBIR   10      verb
+AB      11      noun
+ABAJO   11      noun
+BAJAR   11      verb
+
+; 12
+;                       Nombres <40 indica que se pueden usar como verbos
+;                               <50 indica nombre propio (no admite lo, la...)
+I       14      noun
+INVEN   14      noun ; Derrivar
+AYUDA     15      noun
+CARGAR      16      noun
+DECAPITAR   17      noun
+SALTAR      18      noun ; Ojo que es un arte de combate.
+HERMANO     19      noun
+TODO    20      noun
+TODOS   20      noun
+TODAS   20      noun
+
+;  
+CHOZA     150      noun
+;ENTRADA  151     noun ; Synom
+MONTANA     152      noun
+GUERRERO     153      noun
+CADAVER     154      noun
+PIRA     155      noun
+UNDRA     156      noun
+HUNDRA     156      noun
+UMBRA     156      noun
+MONTICULO     157      noun
+CRUCE     158      noun
+MESETA     159      noun
+CAVERNA     160      noun
+PARED     161      noun 
+GALERIA      161      noun ; Synom
+TUNEL     161      noun  ; Synom
+ROCA     162      noun
+MINA     163      noun
+    SÍMBOLOS     164      noun
+DERRUMBAMIENTO     165      noun
+  MAR     166      noun
+CABAÑA     167      noun
+CABANA      167      noun
+RIO     168      noun
+    CANOA     169      noun
+    HERRAMIENTA     170      noun
+    PISADAS     171      noun
+
+    PIEDRA     173      noun
+    AGNES     174      noun ; DIEN
+    FUNDICION     175      noun
+    PORTAL     176      noun
+    CALDERO     177      noun
+
+
+    CUENCO     180      noun ; Synom
+MESA     180      noun
+    VOCES     180      noun
+COSAS     181      noun
+MENSAJE     182      noun
+RASTRO     183      noun
+JEFE     184      noun
+    CAJA     185      noun
+    CUERNO     186      noun
+    GANCHO     187      noun
+    LODO     188      noun
+    VEJIGA     189      noun
+    POCION     190      noun
+   GIGANTE     191      noun
+    JAULA     192      noun
+    GRIETA     193      noun
+LODAZAL     193      noun    ; Synom
+CRATER      193     noun  ; Synom
+LLANURA     194      noun
+
+DAGA        196     noun
+LIQUIDO     197     noun
+UBASUTE     198     noun
+ANCLA     199      noun
+    CUCHILLO     200      noun
+PICO     201      noun
+;    HACHA     202      noun
+    HOJA     203      noun
+    LATIGO     204      noun
+    MAZA     205      noun
+    MARTILLO     206      noun
+;Enemies names
+ARAÑA     207      noun
+BEARSERKER     208      noun
+CAPATAZ     209      noun
+ENGENDRO     210      noun
+POSEIDO     211      noun
+GOLEM     212      noun
+SIRVIENTE     213      noun
+MANADA     214      noun
+MUERTE     215      noun
+PARTIDA     216      noun
+BAYA        217     noun
+ARBUSTO     218     noun
+; MASA     219      noun
+
+KASO     220      noun
+BOLA        221     noun
+;    TALISMï¿½N     222      noun
+SUELO     222      noun
+
+
+TROLL        225      noun
+PLAYA        226      noun
+ALDEA        227      noun
+ALLEGRA      228      noun
+DIENTE       229      noun
+OBJETO       230      noun
+HUEVO        231      noun
+NIEVE        232      noun
+CRIATURA     233      noun
+
+;                       Verbos
+
+COGER   20      verb
+CONSTITUCION 21     verb
+QUEMAR          22  verb
+
+DEJAR   23      verb ; synom
+PONER   23      verb
+UNTAR   23      verb ; Synom
+EXTENDER   23      verb ; Synom
+ECHAR   23      verb ; Synom
+R       24      verb
+M       24      verb
+MIRAR   24      verb
+; REDES   24      verb
+F       25      verb
+FIN     25      verb
+SAVE    26      verb
+SV      26      verb
+LOAD    27      verb
+LD      27      Verb
+RAMSA   28      verb
+RAMLO   29      verb
+EX      30      verb
+EXAMI   30      verb
+DECIR   31      verb
+PREGUNT 31      verb
+HABLAR  31      verb
+
+EMPUJAR 33  verb
+MOVER   33  verb
+VOLCAR   33  verb
+ESCALAR   34  noun 
+TREPAR   34  noun ; Synom
+ENTRAR   35  noun ; Coincide con entrada
+PASO        35     noun ; Synom
+CAMINO     35      noun ; Synom
+DESTREZA    36      noun
+
+SACAR     40  verb
+BEBER     41  verb
+; EST         42  verb
+ESTA         42  verb
+ESTADIS     42  verb
+EQ     43  verb
+EQUIPAR     43  verb
+COMER     44  verb
+GIRAR           45      verb
+ROTAR           45      verb
+TIRAR           46      verb
+ESTIRAR           46      verb
+LANZAR          46      verb
+FUERZA      47      verb
+USAR   48  verb
+SOPLAR   49  verb
+
+; 50
+ATACAR  51  verb ; Synom
+ATA     51  verb
+METER   52  verb
+
+
+; Adjetivos
+; PEQUE   2       adjective
+; GRANDE  3       adjective
+; VIEJO   4       adjective
+; VIEJA   4       adjective
+; NUEVO   5       adjective
+; NUEVA   5       adjective
+; DURO    6       adjective
+; DURA    6       adjective
+; BLANDO  7       adjective
+; CORTO   8       adjective
+; CORTA   8       adjective
+; LARGO   9       adjective
+; LARGA   9       adjective
+;
+INVISIBILIDAD     2      adjective
+CURACIÓN     3      adjective
+
+;                               Adverbios
+;RAPID   2       adverb
+;DESPA   3       adverb
+;LENTA   3       adverb
+;CUIDAd  5       adverb
+
+;                               Prepositions
+A       2       preposition
+DE      3       preposition
+EN      4       preposition
+POR     5       preposition
+TRAVES  5       preposition
+BAJO    7       preposition
+JUNTO   8       preposition
+; Mia 
+CON   9       preposition
+
+MENOS   13      preposition
+;                               Pronombres
+;                               Conjunciones
+Y       2       conjugation
+ENTONCE 2       conjugation
+LUEGO   2       conjugation
+
+;------------------------------------------------------------------------------
+
+/STX    ;Mensajes del sistema
+/0 "" ; está demasiado oscuro para ver nada.
+/1 "Puedes ver:" ; Quito el también
+/2 "#n"
+/3 "#n"
+/4 "#n"
+/5 "#n"
+/6 "No he entendido nada.#n"
+/7 "No puedes ir en esa dirección."
+#define sysNoPuedes 8
+/8 "No puedes hacer eso.#n"
+/9 "Llevas:#n"
+/10 "" ; Llevas puesto:#n
+/11 "";*Libre
+/12 "¿Seguro?"
+/13 "¿Quieres intentarlo de nuevo?"
+/14 ""  ;*Libre
+/15 "Vale."
+/16 "Pulsa una tecla.#n" ; Pulsa una tecla para continuar.#n
+/17 "" ;*Has jugado
+/18 "" ;*\sturno
+/19 "" ;*s
+/20 "" ; *.
+/21 "" ; *Ha resuelto un
+/22 "" ; *%
+/23 "" ; No Llevas eso puesto.
+/24 "" ; No puedes. Tienes puesto _.
+/25 "Ya tienes _."
+/26 "Aquí no hay nada de eso."
+/27 "No puedes llevar nada más."
+/28 "No tienes eso.#n"
+/29 "Ya Llevas puesto _.#n"
+/30 "S";Un solo carï¿½cter en mayï¿½sculas. Inicial de Sï¿½
+/31 "N"  ;Un solo carï¿½cter en mayï¿½sculas. Inicial de No
+/32 "Hay más..."
+/33 "> "
+/34 "" ;*Libre
+/35 "#nEl tiempo pasa..."
+/36 "Has cogido _.#n" ; No funciona quitar l espacio porque si siempre pongo un / una, aï¿½ade uno de más
+/37 "Te has puesto _.#n" ; Salto mio
+/38 "Te has quitado _."
+/39 "Has dejado _. "
+/40 "No puedes ponerte _."
+/41 "No puedes quitare _."
+/42 "No puedes quitarte _.  ; No puedes llevar nada más en las manos."
+/43 "@ pesa demasiado."
+/44 "@ está en"
+/45 "@ no está en"
+/46 ", "
+/47 " y "
+#define sysPuntoSeguido 48
+/sysPuntoSeguido ". "
+/49 "No tienes _."
+/50 "No llevas puesto _."
+#define sysPuntoYAparte 51
+/sysPuntoYAparte ".#n"
+/52 "No hay nada de eso en"
+/53 "Nada.#n" ; Salto mio
+/54 "C" ; Inicial de Cinta
+/55 "D" ; Disco
+/56 "Unidad no preparada. Pulsa una tecla para volver a intentarlo."
+/57 "Error de entrada/salida."
+/58 "El disco o el directorio puede estar lleno."
+/59 "Nombre de fichero no válido."
+/60 "Nombre del fichero:"
+/61 "Pon en marcha la cinta." ; Reusar
+/62 "¿Cinta o disco?"
+#define sysPV 63
+/sysPV "Vida:"
+#define sysPX 64
+/sysPX " puntos de experiencia."
+#define sysYou_have 65
+/sysYou_have "Tienes "
+#define sysYourLvl 66
+/sysYourLvl "Nivel:"
+#define NoEnemy 67
+/NoEnemy "No hay enemigo aquí."
+#define sysPuntosDeVida 68
+/sysPuntosDeVida " puntos de vida." ; #n
+#define sysArteCombate 69
+/sysArteCombate "Puedes usar el arte de combate "
+#define sysSinNivel 70
+/sysSinNivel "No tienes suficiente nivel."
+#define sysyYouDefeated 71
+/sysyYouDefeated "Has vencido a"
+#define sysLogroConseguido 72 ; No lo uso
+/sysLogroConseguido "Logro conseguido. " ; No puedes quitarte _.  No puedes llevar nada más en las manos.
+#define sysFinalConseguido 73 ; No lo uso
+/sysFinalConseguido "Has conseguido el final " ; @ pesa demasiado.
+#define sysSaltasYGolpeas 74
+/sysSaltasYGolpeas "Saltas y golpeas con todas tus fuerzas.#n";*Libre
+#define sysFallas 75
+/sysFallas "Fallas.#n" ; No puedes ponerte _.
+
+
+;------------------------------------------------------------------------------
+/MTX    ;Mensajes exAldeaAt2
+; Mensajes de salidas ; poseido
+/0 "Salidas: "
+/1 "ninguna"
+/2 "norte "
+/3 "sur "
+/4 "este "
+/5 "oeste "
+/6 "" ; northeast
+/7 "" ; northwest 
+/8 "" ; southeast 
+/9 "" ; ssouthwes 
+/10 "arriba " ; exLibroAt124
+/11 "abajo "
+#define msgIrrelevante 12
+/msgIrrelevante "Sin importancia."
+    #define exUmbraAtNone 13
+    /exUmbraAtNone "La mejor guerra que nunca ha pisado el desierto blanco."
+    #define exCanoaAt24 14
+    /exCanoaAt24 "Llevan mucho tiempo sin ser usadas."
+    #define exJefeTribu2 15
+    /exJefeTribu2 "La escama es la protección del fuego."
+    #define exMarAt 16
+    /exMarAt "Siempre enfadado." ; furioso y mortal
+    #define exPiedraAt105 17
+    /exPiedraAt105 "Muchos matan por ellas, pero en el desierto blanco no tienen utilidad."
+    #define exAgnesAt118 18
+    /exAgnesAt118 "Las hijas de una bruja de las nieves tienen magia tan poderosa como la de su madre y son igual de crueles."
+    #define exFundicionAt119 19
+    /exFundicionAt119 "Está al rojo vivo."
+    ; #define exPortalAt119 20 
+    ; /exPortalAt119 "."
+    #define exVocesAt2 20
+    /exVocesAt2 "De mujer."
+    #define exCalderoAt95 21
+    /exCalderoAt95 "Un gran caldero lleno de líquido espeso."
+    #define exMontañaAt120 22
+    /exMontañaAt120 "Tu padre te contó cómo, hace años, ayudó a un ermitaño con magia a asentarse en esta montaña."
+    #define exParedAt120 23
+    /exParedAt120 "La escalada es peligrosa y la caída mortal." ; La escalada es peligrosa. Una caída puede ser mortal.
+    #define exCabañaAt124 24
+    /exCabañaAt124 "Te llaman la atención un objeto." ; Te llaman la atención un libro, una mesa y un tubo de metal.
+    #define exLibroAt124 25
+    /exLibroAt124 "Si superas leer sabrías que es el diario del ermitaño y cuenta que se ha marchado más allá del desierto blanco."
+#define msgArbustoLanudo 26
+/msgArbustoLanudo "Aquí hay un arbusto lanudo."
+#define msgArbustoLanudoconBaya 27
+/msgArbustoLanudoconBaya "Aquí hay un arbusto lanudo con una baya."
+#define exCaminoAt133 28
+/exCaminoAt133 "Gran sima completamente cubierta de nieve. Quien quiere demostrar su valor camina sobre ella. A veces la nieve aguanta."
+ #define exAldeaAt2 29 ; exAldeaAt128
+    /exAldeaAt2 "Algún día la liderarÁs."
+#define msgPasarPortal 30
+/msgPasarPortal "La magia desmonta y vuelve a montar cada parte de tu cuerpo." ; Entras en el portal. 
+#define exPortal 31
+/exPortal "Puerta con magia en la que puedes entrar."
+#define exGiganteAt81EQTrue 32
+    /exGiganteAt81EQTrue "El gigante solloza asustado, encogido en un extremo de la jaula."
+    #define exJaulaAt81EQTrue 33
+    /exJaulaAt81EQTrue "La jaula está hecha de trozos de piedra y hielo que flotan con magia sin que puedas separarlos.#nCuando eras niño, tu padre te contaba historias de un ermitaño con magia que había llegado de lejos. Tal vez él tenga esta magia." ; #nTienen magia poderosa y desconocida. ; Recuerdas que t
+    #define exMesaAt132 34
+    /exMesaAt132 "Sobre la mesa hay un cuenco de madera lleno de dientes amarillentos."
+    #define exAldeaAt128 35
+    /exAldeaAt128 "No ves a nadie. No escuchas nada."
+    #define exPiedraAt124 36
+    /exPiedraAt124 "Flota porque tiene magia."
+#define msgAgnesTeleport 37
+/msgAgnesTeleport "Antes de que puedas hacer nada te lanza un vértice mágico que te succiona. Caes mientras todo gira a tu alrededor.#nAterrizas pesadamente sobre la nieve." ;  muy rápidamente
+#define msgLlevarJefe 38
+/msgLlevarJefe "El guerrero te conduce a la choza del jefe con su arma preparada para matarte al instante si te atreves a blandir la tuya."
+#define exLiquidoAt95 39
+/exLiquidoAt95 "Un líquido marrón y espeso."
+; enemies
+     #define exArañaAtNone 40
+    /exArañaAtNone "Las arañas blancas fueron expulsadas de su hogar. Pocas consiguieron adaptarse al frio."
+    #define exBearserkerAtNone 41
+    /exBearserkerAtNone "Oso gigante de ojos blancos y cegados, consumido por la furia." ; demente
+    #define exCapatazAtNone 42
+    /exCapatazAtNone "Esclavo que azota a otros esclavos para no ser azotado. Sus ojos están blancos y cegados."
+    #define exEngendroAtNone 43 ; LOC 14
+    /exEngendroAtNone "Criatura fabricada con trozos de otras criaturas por crueldad." ; por la crueldad de una bruja de las nieves.
+    #define exGiganteAtNone 44
+    /exGiganteAtNone "Más de tres metros de altura. Tan estúpido que no puede hablar." ; , pero tan estápido que ni siquiera puede hablar.
+    #define exGolemAtNone 45
+    /exGolemAtNone "Tosca figura de hielo animada por magia poderosa y olvidada por su creadora." ; en el desierto blanco
+    #define exSirvienteAtNone 46
+    /exSirvienteAtNone "Tosca figura de nieve animada mágicamente. Su misión terminó tiempo atrás." ; desapareciï¿½
+#define msgBarreraInvisible 47
+/msgBarreraInvisible "Una barrera invisible te impide el paso."
+      #define exRastroAt2 48
+    /exRastroAt2 "Pies pequeños."
+    #define exSímbolosAt2 49
+    /exSímbolosAt2 "Los habías visto cerca de la choza del chaman, pero estos son mucho más elaborados."
+    #define exPoseidoAtNone 50
+    /exPoseidoAtNone "Antes guerrero, ahora un cuerpo torpe sin voluntad. Sus ojos están blancos y cegados." ; , que se mueve torpemente
+    #define exPoseido2AtNone 51
+    /exPoseido2AtNone "Cuerpo sin voluntad que aún agarra obediente el pico que le dieron. Sus ojos están blancos y cegados."
+#define exCajaAt119EQTrue 52
+    /exCajaAt119EQTrue "La caja está al rojo vivo."
+    #define exCajaAt119EQFalse 53
+    /exCajaAt119EQFalse "La caja está fría."
+    #define exMasaAt23EQTrue 54
+    /exMasaAt23EQTrue "Toneladas de nieve bloquean el paso formando un muro impenetrable." ; una pared de varios metros
+#define msgSoplarCuerno 55
+/msgSoplarCuerno "Soplas y el cuerno retumba. El suelo vibra cada vez con más fuerza.#nUna gran grieta se abre en el suelo y engulle "
+#define exKasoAtNone 56
+    /exKasoAtNone "Bestia de cuatro patas y grueso pelaje."
+     #define exCargar 57
+    /exCargar "Con esta técnica de combate corres hacia el enemigo para derribarlo." ; golpearlo y tirarlo
+    #define exSaltar 58
+    /exSaltar "Con esta técnica de combate saltas y golpeas al enemigo." ; lanzas un golpe devastador contra el
+#define exDecapitar 59
+    /exDecapitar "Con esta técnica de combate lanzas un golpe mortal pero quedas expuesto a un contraataque." ; . si lo fallas,
+    #define exChozaAt1 60
+    /exChozaAt1 "La más grande de toda la aldea y dónde la tribu se refugia durante las tormentas."
+    #define exPasoAt130 61
+                        ; dónde la nieve se acumula
+    /exPasoAt130 "Una sima tapada por la nieve. Para demostrar su valor algunos hombres caminan sobre el paso con la esperanza de que la nieve aguante su peso."
+    #define exPisadas2At2 62  ; exPisadasAt2
+    /exPisadas2At2 "'Ja, ja, ja, pobre y estúpida criatura'#nMueves los brazos a tu alrededor intento atrapar a quien te susurra, pero tus brazos solo encuentras aire."
+#define msgPisadasRecientes 63
+/msgPisadasRecientes "Ves pisadas recientes en la nieve."
+    #define exKasoAt40 64
+    /exKasoAt40 " No tiene su vejiga."
+ #define exTroll 65
+    /exTroll "Criatura alta, esquelética y de fuerte hedor. Sus ojos blancos están cegados."
+   #define exCriaturaAtNone 66
+    /exCriaturaAtNone "Las caras que conoces te miran y gimen de dolor."
+    #define exGuerreroAtNone 67
+    /exGuerreroAtNone "Mucho más grande que los demás guerreros del desierto blanco." ; Gran mole de carne, m ;  su tribu
+    #define exPisadasAt3 68
+    /exPisadasAt3 "'Tus tatuajes nos han conducido hasta aquí, como un mapa de estrellas en una noche despejada en alta mar'#nTe giras, pero no ves a nadie, aunque la voz sonaba justo a tu lado."
+#define msgEnemigoTeIgnora 69
+/msgEnemigoTeIgnora "El enemigo te ignora."
+
+;------------------------------------------------------------------------------
+/OTX    ;Object Texts
+
+#define oCaja 0
+/oCaja "Una caja"
+#define oCuerno 1
+/oCuerno "Un cuerno del retumbar"
+#define oGancho 2
+/oGancho "Un gancho"
+#define oLodo 3
+/oLodo "Lodo" ; Bola de lodo.
+#define oPiedra 4
+/oPiedra "Una piedra flotante"
+#define oPocionC 5
+/oPocionC "Una poción de curación"
+#define oPocionI 6
+/oPocionI "Una poción de invisibilidad"
+#define oVejiga 7
+/oVejiga "Una vejiga de Kaso"
+#define oDaga 8
+/oDaga "Una daga sagrada de la tribu del colmillo"
+#define oAncla 9
+/oAncla "Un ancla oxidada"
+#define oCuchillo 10
+/oCuchillo "Un cuchillo de servidor"
+#define oHacha 11
+; /oHacha "Hacha de dios"
+#define oObjeto 11
+/oObjeto "Un extraño objeto"
+#define oHoja 12
+/oHoja "Una hoja delgada"
+#define oLatigo 13
+/oLatigo "Un látigo de capataz"
+#define oMaza 14
+/oMaza "Una maza de bárbaro"
+#define oMartillo 15
+/oMartillo "Un martillo de herrero"
+#define oPico 16
+/oPico "Un pico de minero"
+
+
+;------------------------------------------------------------------------------
+
+; Location Texts
+/LTX    
+
+/0 "--  Epic Adventures presenta Tribus  --#n#nBienvenido al desierto blanco, continente de llanuras de nieves eternas y largas cordilleras.#n#nLa vida es tan dura como corta. Pocos sobreviven al hambre, al frio y al ataque de criaturas y tribus rivales.#n#nTambién es la cárcel de las brujas de las nieves. Encerradas aquí para siempre, estas crueles y poderosas hechiceras son las dueñas de esta tierra inhóspita.#n#nPrepárate a luchar por tu vida y por el destino de tu tribu.#n"
+/1 "Al este está la entrada de la choza del líder. Al norte, un pequeño camino sale de la aldea." ; flanqueado por chozas 
+/2 "Estás en la entrada de la aldea. más allá hay un camino nevado encajado entre montañas." ; dos
+/3 "Un paso helado."
+/4 "Un paso helado."
+/5 "Estás en una vasta llanura helada."
+/6 "Estás en una vasta llanura helada."
+/7 "Estás en una vasta llanura helada."
+/8 "Estás en una vasta llanura helada."
+/9 "Estás en una vasta llanura helada." 
+/10 "Estás en una vasta llanura helada."
+/11 "Estás en una vasta llanura helada."
+/12 "Estás en una vasta llanura helada."
+/13 "Estás en una vasta llanura helada."
+/14 "Estás en una vasta llanura helada."
+/15 "Estás en una vasta llanura helada."
+/16 "Estás en una vasta llanura helada."
+/17 "Estás en una vasta llanura helada."
+/18 "Llegas a un pequeño camino entre la nieve."
+/19 "Estás en un río congelado que va de norte a sur." ;la orilla de 
+/20 "Estás en un río congelado que va de norte a sur."
+/21 "Estás en un río congelado que va de norte a sur."
+/22 "Estás en un estrecho paso entre montañas, cerca del gran lago."
+/23 "Estás en un estrecho paso entre montañas."
+/24 "Un camino te acerca a la aldea de la tribu de siempreviento en las alas. A ambos lados ves las herramientas que usan para pescar."
+/25 "Un fiero guerrero te impide la entrada.#n'Atrás perro. Solo los mensajeros pueden ver al jefe'"
+/26 "Avanzas por un estrecho paso entre montañas." ; dos
+/27 "Avanzas por un estrecho paso entre montañas."
+/28 "Avanzas por un estrecho paso entre montañas."
+/29 "Estás en una vasta llanura helada."
+/30 "Estás en una vasta llanura helada."
+/31 "Estás en una vasta llanura helada."
+/32 "Estás en una vasta llanura helada."
+/33 "Estás en una vasta llanura helada."
+/34 "Estás en una vasta llanura helada."
+/35 "Estás en una vasta llanura helada."
+/36 "Estás en una vasta llanura helada."
+/37 "Estás en una vasta llanura helada."
+/38 "Estás en una vasta llanura helada."
+/39 "Estás en una vasta llanura helada."
+/40 "Estás en una vasta llanura helada.#nAquí hay un kaso ya muerto."
+/41 "Avanzas por un estrecho paso entre montañas." ; dos 
+/42 "Avanzas por un estrecho paso entre montañas."
+/43 "Estás en una caverna helada."
+/44 "Estás en una caverna helada."
+/45 "Estás en una caverna helada."
+/46 "Estás en una caverna helada."
+/47 "Estás en una caverna helada."
+/48 "Estás en una caverna helada."
+/49 "Estás en una caverna helada."
+/50 "Estás en una caverna helada."
+/51 "Estás en una caverna helada."
+/52 "Estás en una caverna helada."
+/53 "Estás en una caverna helada." ; Cuerno del retumbar
+/54 "Llegas a la entrada de una gran caverna helada." 
+/55 "Avanzas por un estrecho paso entre montañas."
+/56 "Avanzas por un estrecho paso entre montañas."
+/57 "Avanzas por un estrecho paso entre montañas." ; dos 
+/58 "La nieve se amontona en grandes montículos dejando solo un pequeño camino por el que avanzar."    ; Amnï¿½sico 1.
+/59 "La nieve se amontona en grandes montículos dejando solo un pequeño claro."   ; Amnï¿½sico 2.
+/60 "Estás en un camino que cruza un valle de nieve."
+/61 "Estás en una vasta llanura helada." 
+/62 "Estás en una vasta llanura helada.#nAquí hay un Kaso ya muerto." 
+/63 "Estás en una vasta llanura helada."
+/64 "Estás en una vasta llanura helada."
+/65 "Estás en un camino que cruza un valle de nieve junto a la gran cordillera."
+/66 "Estás en un camino que cruza un valle de nieve junto a la gran cordillera."
+/67 "Llegas a una llanura de nieve rodeada de grandes montañas." 
+/68 "Un camino te acerca a la aldea de la tribu de la escama blanca. #nA ambos lados ves los cadáveres de sus guerreros sobre piras funerarias."
+/69 "En la entrada a la aldea de la tribu de la escama blanca ves a Umbra, su más fiera guerrera, que te impide el paso. "
+/70 "Llegas a un camino que serpentea entre montículos de nieve."
+/71 "Llegas a un camino que serpentea entre montículos de nieve."
+/72 "El camino termina en un cruce entre grandes montículos de nieve." ; bordeado de
+/73 "Llegas a un camino que serpentea entre montículos de nieve."
+/74 "Avanzas por un estrecho paso entre montañas. La nieve se amontona a ambos lados."
+/75 "Avanzas por un estrecho paso entre montañas."
+/76 "" 
+/77 "" 
+/78 "Avanzas por un estrecho paso entre montañas." ; dos
+/79 "El estrecho paso termina en una pequeña playa rocosa dónde un mar salvaje azota las rocas."
+/80 "Estás en un amplio camino que cruza un valle de nieve."
+/81 "Llegas a un claro cubierto de nieve rodeado por la gran cordillera."
+/82 "Estás en el camino de la aldea de la tribu del colmillo. Todo está demasiado tranquilo." 
+/83 "Llegas a la entrada de la aldea de la tribu del colmillo. Todo está demasiado tranquilo."
+/84 "Estás en el centro de la aldea de la tribu del colmillo."
+/85 "Avanzas por un estrecho paso entre montañas." ; dos
+/86 "Avanzas por un estrecho paso entre montañas." ; mági
+/87 "Avanzas por un estrecho paso entre montañas."
+/88 "Estás en una llanura cubierta de nieve."
+/89 "Estás en una llanura cubierta de nieve."
+/90 "Estás en una llanura cubierta de nieve."
+/91 "Estás en una llanura cubierta de nieve."
+/92 "Estás en una llanura cubierta de nieve."
+/93 "Estás en una llanura cubierta de nieve."
+/94 "Estás en una llanura cubierta de nieve."
+/95 "Estás en una llanura cubierta de nieve.#nEn el centro de la llanura hay un gran caldero."
+/96 "El camino termina en un cruce entre grandes montículos de nieve."
+/97 "Avanzas por un estrecho paso entre montañas." ; dos
+/98 "El camino termina al pie de una pared de roca helada. Ves un pequeño lodazal." 
+/99 "Avanzas por un estrecho paso entre montañas."
+/100 "Llegas a la entrada de una mina, abandonada hace tiempo.#nUn búho blanco levanta el vuelo." 
+/101 "Llegas a una escalera para bajar al fondo de la mina." ; plataforma
+/102 "Llegas a un túnel construido recientemente para conectar la mina con una nueva red de galerías."
+/103 "" 
+/104 "Llegas a una escalera para bajar aún más al fondo." ; plataforma
+/105 "Estás en una galería de la mina. #nTrolls helados pican las paredes buscando piedras amarillas."
+/106 "Estás en una bifurcación entre varias galerías."
+/107 "Estás en una bifurcación entre varias galerías."
+/108 "Estás en una galería de la mina. #nTrolls helados pican las paredes buscando piedras amarillas."
+/109 "Avanzas por una galería hasta que termina sin salida. #nVarios trolls helados pican las paredes."
+/110 "Estás en una galería de la mina."
+/111 "Avanzas por una galería hasta que termina sin salida. #nTrolls helados pican las paredes buscando piedras amarillas."
+/112 "Estás en una galería de la mina. #nTrolls helados pican las paredes buscando piedras amarillas."
+/113 "Estás en una galería de la mina. #nTrolls helados pican las paredes buscando piedras amarillas."
+/114 "Estás en una bifurcación entre varias galerías."
+/115 "Avanzas por una galería hasta que termina sin salida. #nTrolls helados pican las paredes."
+/116 "Estás en una galería de la mina. #nTrolls helados pican las paredes buscando piedras amarillas."
+/117 "Estás en una galería de la mina. #nTrolls helados pican las paredes buscando piedras amarillas."
+/118 "Llegas a una gran gruta. Muchos trolls helados pican la piedra Aquí. #nSobre una plataforma de piedra, una figura contempla los trabajos. Es Agnes, la hija pequeña de la bruja de las nieves."
+/119 "Llegas a una caverna usada como fundición de las piedras amarillas. #nEn la pared de roca ves un portal mágico."
+/120 "Llegas a la base de la montaña donde vive el ermitaño.#nLa única manera de subir es escalar su helada pared de roca."
+/121 "" 
+/122 "" 
+/123 "Estás en la cima nevada de la montaña.#nFrente a ti ves la cabaña del ermitaño.#nJunto a la cabaña, en una gran roca, ves un portal mágico aún activo."
+/124 "La cabaña está llena de cosas que desconoces. #nEl ermitaño no está aquí."
+/125 "" 
+/126 "Estás en la choza del jefe de la tribu siempreviento en las alas." 
+/127 "Los vientos han desplazado la nieve dejando a la vista un antiguo ubasute."
+/128 "El centro de la aldea, dónde toda tu tribu se reúne a escuchar al líder, a rezar a tu dios o a suplicar misericordia a las brujas de las nieves."
+/129 ""
+/130 "Sales de la aldea. Al oeste está el paso, tumba de valientes hijos del ojo penetrante y también la tumba de tu hermano."
+; estacas con talismanes y 
+/131 "" 
+/132 "Llegas a una pequeña caverna con una gran mesa.#nEl aire rancio te asfixia. Nadie ha estado aquí en muchos años." 
+/133 "Frente a ti está el paso, dónde muchos guerreros valerosos han muerto, entre ellos tu hermano." ; El camino 
+/134 "" 
+/135  "" 
+/136 "" 
+/137 "" 
+/138 "Estás en una vasta llanura helada."
+/139 "Estás en una llanura cubierta de nieve."
+/140 "" 
+
+;------------------------------------------------------------------------------
+/CON    ;Conexiones
+/0
+/1 N 2 E 129 O 128
+/2 N 3 S 1
+/3 N 4 S 2
+/4 N 5 S 3
+/5 N 9 S 4 E 7 O 6
+/6 N 8 E 5 
+/7 N 10 O 5
+/8 N 11 E 9 S 6
+/9 N 12 S 5 O 8 
+/10 N 13 S 7 E 55
+/11 N 14 S 8 E 15 O 18
+/12 N 15 S 9 E 13
+/13 N 16 S 10 O 12
+/14 S 11 O 17 
+/15 N 26 S 12 E 16 O 11
+/16 S 13 O 15
+/17 E 14 S 18
+/18 N 17 E 11 O 19
+/19 N 20 E 18 O 22
+/20 N 21 S 19
+/21 S 20 O 24
+/22 E 19 O 23
+/23 E 22 
+/24 E 21 O 25
+/25 E 24
+/26 N 27 S 15
+/27 N 28 S 26 O 34
+/28 N 29 S 27 E 54
+/29 N 36 S 28 O 30
+/30 N 35 S 31 E 29 
+/31 N 30 S 33 E 32 O 120
+/32 S 34 O 36
+/33 N 31 E 34
+/34 N 32 E 27 O 33
+/35 N 138 S 30 E 36 O 96
+/36 N 40 S 29 E 37 O 35
+/37 S 38 E 41 O 36
+/38 N 37
+/39 N 85 O 40
+/40 S 36 E 39 O 138
+/41 S 54 E 42 O 37
+/42 E 82 O 41
+/43 S 44
+/44 N 43 S 45
+/45 N 44 S 51 E 47 O 46
+/46 E 45 O 54
+/47 S 49 E 48 O 45
+/48 S 50 O 47
+/49 N 47 S 52
+/50 N 48
+/51 N 45 E 52
+/52 n 49 E 53 O 51
+/53 O 52
+/54 N 41 E 46 O 28
+/55 E 56 O 10
+/56 S 57 E 60 O 55
+/57 N 56 S 58 
+/58 N 57 E 59
+/59 O 58
+/60 E 61 O 56
+/61 N 62 E 63 O 60
+/62 S 61 E 64
+/63 S 65 O 61
+/64 N 70 E 68 O 62
+/65 N 63 S 66
+/66 N 65 S 67
+/67 N 66
+/68 E 69 O 64
+/69 O 68
+/70 N 71 S 64
+/71 N 72 S 70
+/72 N 80 S 71 E 73
+/73 E 74 O 72
+/74 E 75 O 73
+/75 S 78 O 74
+/76 BAJAR 75 E 77 
+/77 
+/78 N 75 E 79
+/79 O 78
+/80 S 72 O 81
+/81 E 80
+/82 E 83 O 42
+/83 S 84 O 82
+/84 N 83
+/85 N 86 S 39
+/86 S 85 E 87
+/87 E 88 O 86
+/88 S 89 E 91 o 87
+/89 N 88 E 90
+/90 E 139 O 89
+/91 N 92 E 93 O 88
+/92 S 91
+/93 S 94 O 91
+/94 N 93 E 95
+/95 S 139 O 94
+/96 N 97 E 35
+/97 N 98 S 96 O 99
+/98 S 97
+/99 E 97 O 100
+/100 E 99 O 101
+/101 E 100 BAJAR 102
+/102 O 104 SUBIR 101 ; E 103 
+/103 O 102 ; Sin uso
+/104 E 102 BAJAR 105
+/105 O 106 SUBIR 104 ; E 125
+/106 N 107 S 112 E 105
+/107 N 110 S 106 O 108
+/108 E 107 O 109
+/109 E 108
+/110 N 111 S 107
+/111 S 110
+/112 N 106 S 113
+/113 N 112 E 114
+/114 N 115 S 116 O 113
+/115 S 114
+/116 N 114 S 117
+/117 N 116 O 118
+/118 E 117 O 119
+/119 E 118
+/120 E 31
+/121 BAJAR 120 
+/122 
+/123 N 124 
+/124 S 123
+/125 O 105 ; Sin uso
+/126 
+/127 S 35
+/128 E 1 O 130 ; S 131  Ya no vamos al chamán
+/129 
+/130 E 128 O 133 
+/131 N 128
+/132 E 110 
+/133 E 130
+/134 
+/135 
+/136 
+/137 
+/138 N 127 S 35 E 40
+/139 N 95 O 90
+/140 
+
+;------------------------------------------------------------------------------
+;
+/OBJ    ;Objetos
+/oCaja      119     1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    CAJA   _ ; 119
+/oCuerno      53   1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    CUERNO   _ ; 53
+/oGancho      119   1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    GANCHO   _
+/oLodo         Lodo_Loc   1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    LODO   _ ; Lodo_Loc 98
+/oPiedra      124   1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    PIEDRA   _ ; 124
+/oPocionC      124      1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    POCION   CURACION ; 124
+/oPocionI      NOTCREATED  1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    POCION   INVISIBILIDAD ; NOTCREATED
+/oVejiga      Vegiga_Loc   1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    VEJIGA   _ ;Vegiga_Loc
+/oDaga      NOTCREATED 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    DAGA   _ 
+/oAncla      79 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    ANCLA   _  ; 79
+/oCuchillo      32 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    CUCHILLO   _
+/oObjeto      NOTCREATED 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    OBJETO   _ ; 74
+/oHoja       NOTCREATED 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    HOJA   _ 
+/oLatigo      111 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    LATIGO   _
+/oMaza      CARRIED 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    MAZA   _
+/oMartillo      NOTCREATED 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    MARTILLO   _ 
+/oPico      92 1       _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ Y    PICO   _ ; 92
+
+
+;------------------------------------------------------------------------------
+/PRO 0   
+
+; Este proceso es el primero en ser ejecutado por DAAD, y asï¿½ contiene una primera entrada que
+; salta al proceso que inicializa objetos, flags, etc. y luego cada vez que es llamado, y el
+; jugador ya no está en la localidad 0, se encarga de mostrar el grï¿½fico y texto de la localidad
+; actual, si procede,  y saltar al proceso 1 donde está el sistema que pide ï¿½rdenes al jugador.
+
+> _       _     AT      0                ; Iniciando el juego
+                #ifdef "splitModeON"    ; si soporta split screen, activarla
+                    XSPLITSCR 1
+                #endif
+                PROCESS 6               ; El proceso de inicializaciï¿½n
+                ; LET 300 1
+
+> _       _     WINDOW 1
+                WINAT 14 0              ; por defecto, la ventana de texto está en la parte inferior
+                WINSIZE 25 127
+
+
+> _       _     WINDOW  0               ; Ventana de grï¿½ficos
+                ; CLEAR   fDarkF          ; Asume que hay luz
+                ; NOTZERO 0
+                ; ABSENT  0
+                ; SET     fDarkF          ; Oscuro
+                
+
+
+; Esto no me afecta                
+#ifdef "nativeraster"               ; GRAFICO PARA TARGETS CON GRAFICOS RASTER NATIVOS
+> _       _     ZERO fDarkF
+                PICTURE @fPlayer        ; Si hay una imagen, cargarla
+                DISPLAY 0
+                SKIP $pictureOK
+
+#else                               ; GRAFICO PARA TARGETS CON GRAFICOS RASTER NO NATIVOS
+    #ifndef "tape48"                ; Y QUE NO SEAN Spectrum 48K
+    ; > _       _     ZERO fDarkF
+    ;                CLEAR 20
+    ;                XPICTURE @fPlayer        ; Si hay una imagen, cargarla
+    ;                ZERO 20                  ; Si fue cargado
+    ;                SKIP $pictureOK
+    #endif
+#endif
+
+; No me afecta
+#ifndef "splitModeON"                  ; Esta entrada solo se ejecuta si no hay split screen, y solo llegamos a ella si fallá la carga de la imagen o está oscuro
+> _       _     WINDOW 1
+                WINAT 0 0               ; Si no hay imagen, nos ponemos a pantalla completa de texto
+                WINSIZE 25 127
+                CLS
+                #ifdef "next" ; Do not translate this string
+                    GT  20 127               ; Si fallá la carga de la imagen...
+                    XNEXTCLS                 ; Deshabilita y borra Layer2
+                #endif
+#else
+> _ _           CLS                      ; Si fallá la carga pero tenemos split mode, nos limitamos a hacer el CLS de la ventana grï¿½fica
+#endif
+
+$pictureOK
+
+
+> _       _     WINDOW 1                 ; Ventana de texto
+                PROCESS pStatus_Bar      ; Cambio mio 
+                ; NOTZERO fDarkF           ; Oscuro
+                ; SYSMESS 0
+
+> _       _     ; ZERO    fDarkF
+                DESC   @fPlayer
+                
+                CLEAR fPARAM0
+				PROCESS pSetGet_Flag_Loc
+                ; Comprobamos si hay algo más que aï¿½adir que dependa de fLOC
+                PROCESS pDynamic_Description
+
+                ; Salidas
+                NEWLINE
+                PROCESS pExits         
+
+> _       _     PROCESS 3
+
+; Ahora usamos el proceso 1 como el bucle principal del juego. Un retorno desde
+; Aquí significa el fin del juego
+
+> _       _     PROCESS 1
+
+;------------------------------------------------------------------------------
+/PRO 1
+
+; Este proceso se encarga de ir pidiendo ï¿½rdenes al jugador e ir ejecuándolas,
+; ya sea como ï¿½rdenes, o como movimientos en las distintas direcciones.
+; Nothing to translate here
+
+> _       _     PROCESS 4               ; Lo que en el PAW era el proceso 2
+
+> _       _     PARSE   0               ; Toma sentencia lï¿½gica del buffer
+                PROCESS 2               ; Sentencia no vï¿½lida o timeout
+                REDO
+
+> _       _     PROCESS 5               ; La antigua tabla de respuestas
+                ISDONE                  ; Ha hecho algo?
+                REDO                    ; Sï¿½ï¿½: pedimos otra orden del jugador
+
+> _       _     MOVE    fPlayer         ; No: intentamos mover al jugador
+                CLS
+                RESTART                 ; Lo movimos: salta al principio de PRO 0
+
+> _       _     NEWTEXT
+                LT      fVerb    14
+                SYSMESS 7
+                REDO
+
+> _       _     SYSMESS 8
+                REDO
+
+
+;------------------------------------------------------------------------------
+/PRO 2
+
+; Este pequeño proceso se encarga de dar una respuesta diferente al jugador dependiendo de si
+; ha ocurrido un timeout, o si lo que ha tecleado es ininteligible para el parser.
+; Nothing to translate here
+
+> _       _     HASAT TIMEOUT
+                SYSMESS 35
+                DONE
+
+> _       _     SYSMESS 6               ; No te entiendo
+
+;------------------------------------------------------------------------------
+/PRO 3
+
+; Este proceso se ejecuta justo despuï¿½s de mostrar la descripciï¿½n de una localidad, y se encarga de mostrar la lista de objetos
+; que hay en ella, si los hay. Puedes aï¿½adir Aquí entradas que muestren texto o hagan cosas cuando el jugador llega a determinada 
+; localidad. Para los que venï¿½s de PAW, es el equivalente al proceso 1. Ver las entradas de ejemplo:
+
+; EJEMPLOS:
+; > _ _  AT 2                                       ; ï¿½Estamos en la localidad de la puerta?
+;        NOTZERO fPuertaAbierta                     ; ï¿½está la puerta abierta? (esto requiere que en otro sitio modifiquemos el flag fPuertaAbierta)
+;        MESSAGE "La puerta está abierta. "         ; Mostramos texto
+;
+; > _ _  AT 17                                      ; ï¿½Estamos en la localidad con atmásfera irrespirable?
+;        NOTCARRIED oTrajeProtector                 ; ï¿½No llevamos el traje?
+;        MESSAGE "Te has asfixiado. Estás muerto."  ; Mostramos texto
+;        END                                        ; ï¿½Jugar de nuevo?
+
+
+ 
+; Esta entrada ya viene activa, y es la que se encarga precisamente de mostrar la lista de objetos (si los hay, y no está oscuro)
+> _       _     NEWLINE
+                ; ZERO    fDarkF            ; No está oscuro
+                LISTOBJ
+                
+
+; Cargamos el flag pero no hacemos nada Aquí.
+> _		_		CLEAR fPARAM0
+				PROCESS pSetGet_Flag_Loc
+                ; Comprobamos si ha lelgado a una localizaciï¿½n con cut-scene
+                PROCESS pCutScenes
+                ; Actualizamos el estado del jugador
+                PROCESS pCheck_State
+
+
+> _     _   NOTEQ fLook 255
+            CLEAR fHP_Enemy
+            DONE
+
+;------------------------------------------------------------------------------
+/PRO 4 
+
+; Este proceso se ejecuta cada turno, despuï¿½s de dar respuesta la orden del jugador. Es ï¿½til para controlar cosas que puedan 
+; pasar pasado un tiempo, o eventos que puedan ocurrir en cualquier momento. Para los que venï¿½s de PAW, es el equivalente al
+; proceso 2. Ver las entradas de ejemplo:
+
+; > _ _   AT 17                                         ; ï¿½Estamos en la localidad de la atmásfera irrespirable?
+;         MINUS fOxigenoEnTraje 1                       ; Decrementamos en 1 el valor del flag fOxigeno en traje (ha debido ser puesto a un cierto valor antes)
+;         ZERO fOxigenoEnTraje                          ; ï¿½Hemos llegado a cero? ï¿½El ï¿½xigeno se ha acabado?
+;         MESSAGE "No puedes respirar. Estás muerto."   ; Mostramos texto
+;         END                                           ; ï¿½Jugar de nuevo?
+;
+; > _ _   AT 4                                          ; ï¿½Estamos en el bosque?
+;         CHANCE 10                                     ; Esta condiciï¿½n se cumple un 10% de las veces
+;         MESSAGE "Oyes algo que repta entre las hojas" ; Mostrar texto
+
+
+> _		_		CLEAR fPARAM0
+				PROCESS pSetGet_Flag_Loc
+
+
+> _		_		PROCESS Check_Enemy
+				DONE 
+;------------------------------------------------------------------------------
+
+/PRO 5 
+
+; En este proceso se da respuesta a la ordenes del jugador, por lo que las entradas suelen
+; tener verbo y nombre, o al menos verbo. Las ï¿½rdenes del jugador ejecutarï¿½n cada entrada
+; si coinciden con las palabras indicadas en cada una. Ten en cuenta que se ejecutan en 
+; el orden en el que están en el fichero, por lo que las respuEstás más genï¿½ricas deben
+; detrï¿½s de las más especï¿½ficas. Para los que venï¿½s de PAW, es el equivalente a la tabla 
+; de respuestas.
+
+; Translate text strings and commands. It is a lot of work.
+; 
+;--- Genï¿½ricos ------------------------
+
+> USAR      POCION ; PROBAR ESTE SINONIMO
+                SYNONYM BEBER POCION
+
+
+
+> USAR      LODO
+> PONER     LODO
+                CARRIED oLodo
+                MESSAGE "Extiendes el lodo por todo tu cuerpo. Es espeso y tapa tu olor."
+                LET fState EMBARRADO
+                CLEAR fStateCounter
+                ; DESTROY   oLodo
+                PLACE oLodo Lodo_Loc
+                DONE
+
+
+> COGER     BAYA
+            MESSAGE "Las bayas deben comerse en el acto o se estropean." ; de un arbusto lanudo 
+            DONE
+
+
+> ATACAR    _
+                ; Comprueba si hay que quitar une stado.
+                EQ fState INVISIBLE
+                SET fStateCounter
+                PROCESS pCheck_State
+
+> ATACAR    _
+                ; Comprueba si hay que quitar une stado.
+                EQ fState EMBARRADO
+                SET fStateCounter
+                PROCESS pCheck_State
+
+
+;-- 1
+
+> E     _
+            ; sI pHALANX está ACTIVADO NO PUEDES VOLVER A ENTRAR en la choza del líder
+            AT 1
+            NOTZERO fHP_Enemy
+            MESSAGE "La criatura te impide el paso."
+            DONE
+
+;-- 3
+
+> N     _
+            ; sNo pedes volver al desierto blaNCO.
+            AT 3
+            EQ fMissiñons_Done ALL_MISSIONS
+            MESSAGE msgBarreraInvisible
+            DONE
+
+
+;-- 25
+
+> ATACAR    _
+                AT 25
+                MESSAGE "El guerrero sonríe y ves sus grandes colmillos."
+                MESSAGE "'Tribu de kasos. Hoy bailaremos alrededor de tu cabeza'#nVarios pescadores se acercan y forman un círculo."
+                ANYKEY
+                GOTO 134
+                RESTART     
+
+;-- 69
+
+> ATACAR    _
+                AT 69
+                MESSAGE "'Me haces feliz akesi. Complaceré a mi dios y mi tribu con tu muerte'"
+                ; Umbra saca sus dos laques y comienza a girarlos.#nPrepï¿½rate para luchar.
+                MESSAGE "Umbra saca dos laques.#nPrepárate para luchar."
+                ANYKEY
+                GOTO 136
+                RESTART     
+
+;-- 84
+;-- Tribu del colmillo.
+
+> AYUDA     _
+                AT 84
+                MESSAGE "Ellos la necesitan más que tú."
+                DONE
+                
+> ATACAR    _
+                AT 84
+                MESSAGE "Confiar en un guerrero de otra tribu que reza a otro dios siempre es un error. Ahora lo van a pagar con sus vidas."
+                MESSAGE "Cuando terminas, limpias tu arma y te marchas para no volver."
+                LET fPossesed TRIBE_DESTROYED ; Tribud estruida, yA NOS E PUEDEN SUMAR más POSEIDOS ni puedo volevr Aquí
+               
+                PLUS fMissiñons_Done 1
+                LET fPARAM0 30 ; 70
+                PROCESS pAdd_PX
+                GOTO 83
+                ANYKEY
+                RESTART
+
+> LANZAR    VEJIGA
+> USAR      VEJIGA
+                AT 84
+                CARRIED oVejiga
+                MESSAGE "Lanzas la vejiga contra el anciano. Explota y el líquido salpica a todos los que ha alrededor. Apenas tienen tiempo de taparse la nariz. El nauseabundo líquido atrae a una manada de lobos cercana."
+                MESSAGE "Los lobos te ignoran mientras desgarran y devoran a los supervivientes de la tribu del colmillo."
+                MESSAGE "Cuando el frenesí termina, sólo tú quedas con vida en la aldea."
+                LET fPossesed TRIBE_DESTROYED ; CERRADO ; yA NOS E PUEDEN SUMAR más POSEIDOS
+               
+                LET fPARAM0 70
+                PROCESS pAdd_PX
+                ; Una mision más hecha
+                PLUS fMissiñons_Done 1
+                ANYKEY
+                GOTO 83
+                RESTART
+
+
+
+;--- 95
+
+; Echar la vejiga al caldero
+
+
+> USAR      VEJIGA
+> PONER     VEJIGA
+            AT 95
+            EQ fDead_Posesed 255 ; No la has usado antes.
+            MESSAGE "Ya no hay poseídos."
+            DONE
+
+
+;> ECHAR     VEJIGA
+> USAR      VEJIGA
+> PONER     VEJIGA
+            AT 95
+            NOTEQ fDead_Posesed 255 ; No la has usado antes.
+                CARRIED oVejiga
+                PLACE oVejiga Vegiga_Loc ; pONER LA VEJIGA EN SU loc
+                MESSAGE "Echas la vejiga en el caldero."
+                ; Ves a los poseídos caminando hacia el caldero. Te ignoran. ; el líquido ;  de la vejiga
+                MESSAGE "Los poseídos caminan hacia el caldero, atraídos por el olor y beben compulsivamente sin importarles el hedor."
+                MESSAGE "Después, comienzan a morderse, arañarse y arrancarse las entrañas entre ellos."
+                MESSAGE "Más poseídos siguen viniendo, bebiendo y atacando." ; del caldero antes de unirse a la masacre
+                MESSAGE "Ya no tienes nada más que hacer aquí."
+                NEWLINE ; poseidos
+                LET fPARAM0 60
+                PROCESS pAdd_PX
+                LET fDead_Posesed 255 ; cOMO SI HUBIERAS MATADO A 255 POSEIDOS.
+               
+                PROCESS CXheck_Possesed_Mission
+               ; Si no he acabado la misión o matado a la tribu
+                LT fPossesed 155
+                LET fPossesed ABIERTO ; Como si ya hubiera hablado con la tribu.
+                DONE
+
+
+
+
+
+
+> BEBER     CALDERO
+> BEBER     LIQUIDO
+                AT 95
+                MESSAGE "Despiertas de un sueño. No sabes dónde estás ni cómo has llegado. Las pisadas en la nieve son de tus pies."
+                MESSAGE "Solo deseas volver a beber el líquido y seguir soñando."
+                GOTO 85
+                RESTART
+
+> EMPUJAR       CALDERO
+                AT 95
+                MESSAGE "El líquido se derrama sobre la nieve, pero eso no detiene a los poseídos. Se arrodillan y lo lamen con devoción."
+                DONE
+
+;-- 110
+
+> AYUDA     _
+            AT 110
+            EQ fLOC CERRADO
+            MESSAGE "Intenta hacer cosas con la roca."
+            DONE
+
+;-- 119
+
+> COGER     CAJA
+                AT 119
+                ZERO fLOC
+                ; Comprobar si suas el gancho
+                NOUN2 GANCHO
+                NOTCARR oGancho
+                MESSAGE "No puedes hacer eso."
+                DONE 
+
+> COGER     CAJA
+                AT 119
+                ZERO fLOC
+                ; Comprobar si suas el gancho
+                NOUN2 GANCHO
+                CARRIED oGancho
+                ; Darlo por bueno.
+                SYNONYM USAR GANCHO
+
+> COGER     CAJA
+                AT 119
+                ; No has sacado la caja con el gancho
+                ZERO fLOC
+				MESSAGE "Intentas coger la caja. está al rojo vivo y te quemas."
+                ; Dolor y daño TODO
+                DONE
+
+
+;-- 131
+
+> AYUDA		_		AT 131
+                    MESSAGE "Pide ayuda a tu chamán."
+					DONE
+
+
+
+
+;-----------------------
+
+> BEBER     POCION
+            ; Hay un enemigo Aquí
+            GT fLOC LAST_ENEMY
+                CARRIED oPocionI
+                ADJECT1 INVISIBILIDAD
+                MESSAGE "El enemigo rompe el frasco antes de que puedas beber."
+                ; LET fState INVISIBLE
+                ; CLEAR fStateCounter
+                DESTROY oPocionI
+                DONE
+
+
+> BEBER     POCION
+                ADJECT1 INVISIBILIDAD
+                CARRIED oPocionI
+                MESSAGE "Te bebes la poción y te vuelves invisible para los enemigos."
+                LET fState INVISIBLE
+                CLEAR fStateCounter
+                DESTROY oPocionI
+                DONE
+
+> BEBER     POCION
+                ADJECT1 CURACION
+                CARRIED oPocionC
+                LET fPARAM0 HP_POCION_CURACION
+                LET fPARAM1 SUMAR
+                PROCESS pChange_HP
+                DESTROY oPocionC
+                DONE
+
+> BEBER     POCION
+                 CARRIED oPocionI
+                MESSAGE "Indica qué poción."
+                DONE
+
+> BEBER     POCION
+                 CARRIED oPocionC
+                MESSAGE "Indica qué poción."
+                DONE
+
+
+> USAR      VEJIGA
+> PONER     VEJIGA
+                CARRIED oVejiga
+                MESSAGE "Extiendes el líquido de la vejiga por todo tu cuerpo. Ahora apestas." ; desprendes un olor nausabundo
+                CLEAR fStateCounter
+                LET fState APESTOSO
+                ; Poner la vegiga d enuevo en su loc
+                PLACE oVejiga Vegiga_Loc
+                DONE
+
+;-----------------------
+
+> I       _     SYSMESS 9
+                LISTAT  CARRIED
+                ; SYSMESS 10
+                ; LISTAT  WORN
+                MES "Arma: "
+                ;PRINT fWeapon
+                PROCESS Print_Weapon_Name
+                DONE
+
+> COGER   TODO  DOALL   HERE                
+> COGER   _     AUTOG
+                DONE
+
+> R       _     CLS
+                SET fLook
+                RESTART
+
+> FIN     _     QUIT
+                END
+                 
+
+> SAVE    _     #ifndef "tape48"
+                XSAVE 0                  ;ditto
+                #endif
+                #ifdef "tape48"
+                SAVE 0
+                #endif
+                CLS
+                RESTART
+
+> LOAD    _     #ifndef "tape48"
+                XLOAD  0
+                #endif
+                #ifdef "tape48"
+                LOAD   0
+                #endif
+                CLS
+                RESTART
+
+> RAMSA   _     RAMSAVE
+                CLS
+                RESTART
+
+> RAMLO   _     RAMLOAD 255                             ;Reload all flags
+                CLS
+                RESTART
+
+> MIRAR   _     CLS
+            RESTART
+
+; Si Phalanx está activado
+> AYUDA		_		
+                    EQ fLOC B_PHALANX
+                    MESSAGE "Demuestra tu valor."
+					DONE
+
+
+> AYUDA		_		MESSAGE "Lee el manual."
+					DONE
+
+> ESTADIS   _       PROCESS pEstadisticas
+                    DONE
+
+> ATACAR		_		
+                    CLEAR fPARAM1
+                    CLEAR fPARAM3
+
+                    PROCESS Player_Attacks
+					DONE
+
+> CARGAR		_	
+                    ; Comprobar el nivel
+                     GT fLevel LVL_CHARGE
+                    CLEAR fPARAM1
+                    CLEAR fPARAM3
+                    PROCESS Player_Charge
+					DONE
+
+> CARGAR		_	
+                    ; Comprobar el nivel
+                     LT fLevel LT_CHARGE
+                    SYSMESS sysSinNivel
+					DONE
+
+> SALTAR		_	
+                    GT fLevel LVL_JUMP
+                    PROCESS Player_Jumps
+                    ZERO fRETURN0
+                    PROCESS Player_Attacks
+                    CLEAR fPARAM1
+                    CLEAR fPARAM3
+					DONE
+
+> SALTAR		_		
+                     LT fLevel LT_JUMP
+                    SYSMESS sysSinNivel
+					DONE
+
+
+> DECAPITAR     _
+                    ; Comprobar el nivel
+                    GT fLevel LVL_DECAPITATE
+                    PROCESS Player_Decapitate
+					DONE
+
+> DECAPITAR     _
+                    ; Comprobar el nivel
+                     LT fLevel LT_DECAPITATE
+                    SYSMESS sysSinNivel
+					DONE
+
+
+; Subr estadï¿½sticas
+; PENDIENTE DE PROBAR
+
+> FUERZA        _
+                    NOTEQ fAttribPoints 0
+                    PLUS fStrong ATTRIB_PER_POINT
+                    MINUS fAttribPoints 1
+                    OK
+
+> DESTREZA      _
+                    NOTEQ fAttribPoints 0
+                    PLUS fDexterity ATTRIB_PER_POINT
+                    PLUS fDefense ATTRIB_PER_POINT
+                    MINUS fAttribPoints 1
+                    OK
+
+> CONSTITUCION  _
+                    NOTEQ fAttribPoints 0
+                    PLUS fConstitution ATTRIB_PER_POINT
+                    PLUS fHP_Max ATTRIB_PER_POINT
+                    PLUS fHP ATTRIB_PER_POINT
+                    MINUS fAttribPoints 1
+                    OK
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Comer bayas
+
+> COMER     BAYA
+            EQ fLOC ARBUSTOBAYA
+            LET fPARAM0 SET_FLAG
+            LET fPARAM1 ARBUSTONOBAYA
+            PROCESS pSetGet_Flag_Loc
+            LET fPARAM0 HP_BAYA
+            LET fPARAM1 SUMAR
+            PROCESS pChange_HP
+            CLEAR fTMP0
+            DONE
+
+
+; Decir con un ene igo pacï¿½fico
+> DECIR     _
+                 GT fLOC LAST_ENEMY ; Hay un enemigo
+                 EQ fEnemy_State PACIFIC
+                 MESSAGE msgEnemigoTeIgnora
+                 DONE
+
+; Decir con un ene igo
+> DECIR     _
+                 GT fLOC LAST_ENEMY ; Hay un enemigo
+                 MESSAGE "Es el momento de que las armas hablen."
+                 DONE
+
+; 23
+;> USAR CUERNO
+;            SYNONYM SOPLAR CUERNO
+
+> USAR CUERNO
+> SOPLAR CUERNO
+            AT 23
+            CARRIED oCuerno
+            ZERO fLOC
+            ; Liberamos el paso
+            MES msgSoplarCuerno
+            MESSAGE "la nieve, dejando el paso libre."
+            LET fPARAM0 ABIERTO 
+            PROCESS pSetGet_Flag_Loc
+            ;
+            LET fPARAM0 20 ; Puntos de experiencia ; 
+            PROCESS pAdd_PX
+            DONE
+
+; 24
+
+> O     _
+            AT 24
+            NOTZERO fLOC_Aldea_Paso
+            MESSAGE "No tienes nada que hacer en la aldea de la tribu de siempreviento en las alas."
+            DONE 
+
+
+; 25
+; Aquí reseteo arbustos y enemigos.
+;
+> DECIR  AYUDA
+> DECIR  MENSAJE    
+            AT 25       
+            MESSAGE msgLlevarJefe
+            ANYKEY
+            GOTO 126
+            PROCESS Set_Arbustos_Enemies
+            RESTART
+> DECIR  JEFE    
+            AT 25       
+            MESSAGE msgLlevarJefe
+            ANYKEY
+            GOTO 126
+            PROCESS Set_Arbustos_Enemies
+            RESTART
+> DECIR  _    
+            AT 25       
+            MESSAGE "'Ojo, no te vamos a dar ni el pescado podrido'" ; Parece que no sucede nada hasta que te das cuenta que l
+            DONE
+
+;-- Soplar el cuerno
+> USAR CUERNO
+> SOPLAR CUERNO
+            AT 25
+            CARRIED oCuerno
+            ; Parece que no sucede nada hasta que te das cuenta que ls
+            MES msgSoplarCuerno
+            ;MESSAGE "La nieve tiembla bajo tus pies."
+            ;MESSAGE "El temblor se convierte en un terremoto. Tropiezas y caes de rodillas."
+            ;MESSAGE "Frente a ti, la nieve se abre y la tribu de siempreviento en las alas se hunde en una sima sin fondo."
+            MESSAGE "la aldea de la tribu de siempreviento en las alas."
+
+            ; Indoicamos que no hemos hecho la misiï¿½n, sinod estruido a la tribu
+            LET fLOC_Aldea_Paso TRIBE_DESTROYED
+            PLUS fMissiñons_Done 1 ; Una misión más hecha
+            GOTO 24 ; Te saco fuera de la aldea dónde no podrás volver.
+            NEWLINE
+            LET fPARAM0 80
+            PROCESS pAdd_PX
+            ANYKEY
+            RESTART
+
+;-- 42
+;> _     _   
+;            AT 42
+;            PROCESS Set_Arbustos_Enemies
+
+
+;-- 46. Guardian gigante
+
+> E     _
+            AT 46
+            ; Gigante vivo
+            NOTZERO fLOC
+            ; Gigante no liberado
+            NOTEQ fGigante_Liberado ABIERTO
+            MESSAGE "El gigante guardián no te permite pasar."
+            DONE
+
+; Esto nos e activa porque el gigante se considera enemigo.
+; Y si hay un enemigo, decir iene una repsuesta predefinida.
+;> DECIR     _
+;            AT 46
+            ; Gigante vivo
+;            NOTZERO fLOC
+;            MESSAGE "No te entiende."
+            ; Gigante no liberado
+;            NOTEQ fGigante_Liberado ABIERTO
+;            MESSAGE "Ni te deja pasar."
+;            DONE
+
+
+; Dejar la repsuesta por defecto
+; Te rompe el frasco
+; > BEBER     POCION
+;                AT 46
+                            ; Gigante vivo
+;            NOTZERO fLOC
+;                ADJECT1 INVISIBILIDAD
+            ; Comprobar que la llevo
+;            CARRIED oPocionI
+                ; MESSAGE "No servirï¿½a de nada."
+;                MESSAGE msgIrrelevante
+;                DONE
+
+;--- 54
+
+; Quiro el efecto de la invisibilidad, asï¿½ cuando entre en la caverna
+; El gigante guardián me verï¿½. guardian
+> E     _
+            AT 54
+            ; Estoy invisible
+            EQ fState INVISIBLE
+            ; Borra el efecto de la invisibilidad
+            SET fStateCounter
+            LET fPlayer 46
+            ;DONE
+            RESTART
+
+
+;--- 68
+
+> E     _
+            AT 68
+            ; EQ fBox MISSION_DONE ; Ya he estado en la aldea, NO PUEDO VOLVER
+            NOTZERO fBox ; Bien porque les he ayudado 255 o porque les he matado 155
+            MESSAGE "No tienes nada que hacer en la aldea de la tribu de la escama blanca."
+            DONE 
+
+
+; Quemar la aldea
+> QUEMAR    ALDEA
+> USAR      CAJA
+                AT 68
+                ; Misiï¿½n no hecha
+                EQ fBox 0
+                ; Texto
+                MESSAGE "Te acercas a las chozas sin ser visto. Sin saber cómo, consigues que la caja se vuelva a calentar."
+                MESSAGE "La acercas a la madera y esta empieza a humear hasta que prende. El inmenso calor de la caja propaga el fuego rápidamente, formando un círculo que atrapa a toda la tribu de la escama blanca."
+                MESSAGE "La tribu muere con la alegría de haber recuperado el calor."
+                LET fBox TRIBE_DESTROYED
+                PLUS fMissiñons_Done 1
+                ; Dar puntos de experiencia.
+                NEWLINE
+                LET fPARAM0 80
+                PROCESS pAdd_PX
+                DONE
+
+;--- 69
+
+; > DECIR  MENSAJE    
+            ; AT 69       
+            ; MESSAGE "'Di lo que quieres. rápido'"
+            ; DONE
+> DECIR  MENSAJE
+> DECIR  AYUDA    
+            AT 69      
+            MESSAGE "Transmites el mensaje de tu líder." 
+            MESSAGE "'Akesi abre tu ojo'#n'Una bruja nos ha robado el calor. No podemos honrar a nuestros muertos'"
+            MESSAGE "'Busca a la bruja y devuélvenos el calor'#n'Muere por otra tribu. Como agradecimiento yo escupiré sobre tu tumba'" ; ï¿½Akesi quieres ayudar? 
+            DONE
+> DECIR  _    
+            AT 69       
+            MESSAGE "'Tu tribu es tan ridícula como tu dios. Si sirvieras como ofrenda, ya estarías muerto'"
+            DONE
+> AYUDA  _
+            AT 69
+            MESSAGE "A eso vienes."
+            DONE
+
+
+;-- 74
+
+> EX      NIEVE
+            AT 74
+            ISAT oObjeto NOTCREATED ; aún nos e ha descubierto
+            CREATE oObjeto
+            MESSAGE "Encuentras algo en la nieve."
+            DONE
+
+
+;-- 75
+; Trepamos si tenemos el libro.
+> ESCALAR     _
+            AT 75
+            CARRIED oObjeto
+            MESSAGE "La pared está helada y resbalas varias veces, pero consigues llegar a la cima."
+            ANYKEY
+            GOTO 77 ; 76
+            RESTART
+
+;-- 81
+
+; comprobar que el gigante aún no se ha liberado.
+> DECIR  _    
+            AT 81
+            ZERO fLOC ; El gigante aún está Aquí    
+            MESSAGE "Los gigantes no tienen la suficiente inteligencia para hablar."
+            DONE
+
+; > USAR PIEDRA
+;            SYNONYM METER PIEDRA
+
+> USAR PIEDRA
+> METER PIEDRA
+> PONER PIEDRA
+            AT 81
+            ; PRINT fLOC ; Debug
+            ; NEWLINE ; Debug
+            ZERO fLOC ; El gigante aún está Aquí    
+            CARRIED oPiedra
+            MESSAGE "Intentas meter la piedra dentro de la jaula, pero una gran fuerza la empuja hacia fuera."
+            ; Tensas tus másculos y aprietas los dientes, pero la piedra no se nueve."
+            MESSAGE "Tensas tus músculos y aprietas los dientes. Cuando estás a punto de darte por vencido, sientes como una gran mano te agarra el brazo y te lo arranca. Una explosión te lanza por los aires."
+            ANYKEY
+            NEWLINE
+            ; , pero no ver rastro de ï¿½l
+            MESSAGE "Recuperas la conciencia, dolorido pero entero. Hay un cráter dónde antes estaba la jaula del gigante."
+            ANYKEY
+            NEWLINE
+            LET fPARAM0 ABIERTO
+            PROCESS pSetGet_Flag_Loc
+            LET fPARAM0 50 ; 50 PX pot lierarle
+            PROCESS pAdd_PX
+            DESTROY oPiedra
+            DONE
+
+; -- 83
+> S     _
+            AT 83
+            ; Si es mayor es que he ayudado a la tribu 255, o los eh matado, 155
+            GT fPossesed 154 ; Ya he completado la mision, matando 155 o bien 255
+            MESSAGE "No tienes nada que hacer en la aldea de la tribu del colmillo."
+            DONE 
+
+
+;--- 84
+> DECIR MENSAJE
+> DECIR  AYUDA    
+            AT 84
+            ; ZERO fLOC ; No lo comprubo poque si hago la misiï¿½n luego no puedo volver
+            MESSAGE "'Una bruja maldijo a los guerreros de la tribu'" ; la gente sana y fuerte . Ahora están todos malditos
+            MESSAGE "El viejo chamán, ya ciego, te pide ayuda."
+            ; Ningï¿½n bebedizo ni canto
+            MESSAGE "'Nada puede salvarles. Dales descanso y la tribu del colmillo te estará agradecida. Los encontrarás en el norte'"
+            ; MESSAGE "Ayer, hubieras disfrutado exterminando a una tribu. Hoy es diferente."
+
+            ; Restairar enemigos y arbustos
+            PROCESS Set_Arbustos_Enemies
+            ; A partir de ahora empeizan a contar las muertes de poseidos
+            LET fPARAM1 ABIERTO
+            LET fPARAM0 SET_FLAG
+            PROCESS pSetGet_Flag_Loc
+            DONE
+> DECIR  _    
+            AT 84       
+            ; ZERO fLOC ; No lo comprubo poque si hago la misiï¿½n luego no puedo volver
+            MESSAGE "Te escuchan."
+            DONE  
+
+
+;--- 110. Mina. Entrada secreta.
+
+> O     _
+            AT 110
+            EQ fLOC ABIERTO
+            GOTO 132
+            RESTART
+
+
+> EMPUJAR   ROCA
+> TIRAR   ROCA
+> MOVER   ROCA
+            AT 110
+            MESSAGE "No pasa nada."
+            DONE
+
+
+> GIRAR   ROCA
+            AT 110
+            NOTEQ fLOC ABIERTO
+            MESSAGE "Un pequeño bloque de piedra se desplaza, abriendo una salida al oeste."
+            LET fPARAM0 ABIERTO
+            PROCESS pSetGet_Flag_Loc
+            ; Puntos de experiencia
+            LET fPARAM0 60
+            LET fPARAM1 SUMAR
+            PROCESS pAdd_PX
+            DONE
+
+
+;--- 118. Mina, Agnes
+> ATACAR  _ 
+> CARGAR  _
+> DECIR  _
+            AT 118       
+            ; EQ fTMP0 123
+            ; CLEAR fTMP0
+            MESSAGE "Agnes nota tu presencia."
+            MESSAGE msgAgnesTeleport
+            NEWLINE
+            ANYKEY
+            LET 162 B_POSEIDO
+            GOTO 92
+            RESTART
+
+; Ai estaï¿½s invisible o llevas lodo no se da cuenta.
+> O     _
+            AT 118
+            EQ fState INVISIBLE; Efecto no es invisible
+            ; LET fTMP0 198
+              GOTO 119
+            RESTART
+
+> O     _
+            AT 118
+            EQ fState EMBARRADO; Efecto no es lodo
+            ; LET fTMP0 198
+              GOTO 119
+            RESTART
+
+; Si vas al oeste te pilla.
+> O     _
+            AT 118
+            ; NOTEQ fTMP0 198 ; Efecto no es invisibleEfecto no es lodo
+            MESSAGE "Agnes nota tu presencia."
+            MESSAGE msgAgnesTeleport
+            ANYKEY         
+            ; nos aseguramos que hay un enemiog a dï¿½dne te teletransporte
+            LET 162 B_POSEIDO
+            GOTO 92
+            ; CLEAR fTMP0
+            RESTART
+
+
+
+;-- 119
+
+;> SACAR     CAJA
+                ;SYNONYM USAR    GANCHO
+
+> SACAR     CAJA
+> USAR      GANCHO
+                AT 119
+                CARRIED oGancho
+                NOTCARR oCaja
+                LET fPARAM0 ABIERTO
+                PROCESS pSetGet_Flag_Loc
+                MESSAGE "Sacas la caja de la fundición y se enfría al instante."
+                ; PX - No porque se puede repetir
+                ; NEWLINE
+                ; LET fPARAM0 10
+                ; PROCESS pAdd_PX
+                DONE
+
+> ENTRAR	_	AT 119
+				MESSAGE msgPasarPortal
+				ANYKEY
+				GOTO 99
+				;DESC 47 ; Loc destino
+                 ; Reiniciar arbustos y enemigos
+                PROCESS Set_Arbustos_Enemies
+				RESTART
+
+
+;--- 120
+
+> TREPAR    _
+                AT 120
+                  LT fConstitution LT_Constitution_To_Climb
+                ;MESSAGE "Mensaje de advertencia"
+                ;MESSAGE "Tiradas aleatorias"
+                ; No podrás soportar el esfuerzo físico de escalar esta pared.
+                MESSAGE "No podrás con el esfuerzo físico."
+                DONE
+
+> TREPAR    _
+                AT 120
+                GT fConstitution GT_Constitution_To_Climb
+                ;MESSAGE "Mensaje de advertencia"
+                ;MESSAGE "Tiradas aleatorias"
+                MESSAGE "Subes lentamente, buscado los mejores agarres. Jadeas y te paras a recuperar la respiración.#nLo consigues."
+                ; GOTO 121
+                GOTO 123
+                ANYKEY
+                RESTART
+
+
+;-- 123
+
+> ENTRAR	_	AT 123
+				MESSAGE msgPasarPortal
+				ANYKEY
+				GOTO 120
+				;DESC 47 ; Loc destino
+				RESTART
+
+
+
+;-- Genï¿½ricos
+
+> SOPLAR CUERNO
+                MESSAGE  msgIrrelevante ; No es el momento.
+                DONE
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+
+> EX  RIO     ;AT 19
+                        MESSAGE msgIrrelevante
+                        DONE
+;    > EX  RIO     AT 20
+;                        MESSAGE exRioAt19
+;                        DONE
+;    > EX  RIO     AT 21
+;                        MESSAGE exRioAt19
+;                        DONE
+    > EX  CANOA     AT 24
+                        MESSAGE exCanoaAt24
+                        DONE
+    > EX  HERRAMIENTA     AT 24
+                        MESSAGE exCanoaAt24
+                        DONE
+    > EX  GIGANTE     AT 46 ; Lo has matado.
+                        ZERO fLOC
+                        MESSAGE "Sigue muerto."
+                        DONE
+
+    > EX  CALDERO     AT 95
+                         NOTEQ fDead_Posesed 255 ; Nos e ha echado la vejiga
+                        MESSAGE exCalderoAt95
+                        DONE
+
+    > EX  CALDERO     AT 95
+                         EQ fDead_Posesed 255 ; Se ha ha echado la vejiga
+                        MESSAGE "El líquido de la vejiga se ha mezclado con el líquido del caldero."
+                        DONE
+
+    > EX  LIQUIDO     AT 95
+                        MESSAGE exLiquidoAt95
+                        DONE
+
+> EX ESCALERA   
+                    AT 101
+                    MESSAGE "Aguantará tu peso."
+                    DONE
+> EX ESCALERA   
+                    AT 104
+                    MESSAGE "Aguantará tu peso."
+                    DONE
+> EX ESCALERA   
+                    MESSAGE msgIrrelevante
+                    DONE
+
+    > EX  PIEDRA     AT 105
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 108
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 110
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 112
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 113
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 115
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 116
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  PIEDRA     AT 117
+                        MESSAGE exPiedraAt105
+                        DONE
+    > EX  AGNES     AT 118
+                        MESSAGE exAgnesAt118
+                        DONE
+    > EX  FUNDICION     AT 119
+                        MESSAGE exFundicionAt119
+                        DONE
+
+    > EX  PORTAL     AT 119
+                        MESSAGE exPortal
+                        DONE  
+     > EX  MONTAÑA     AT 120
+                        MESSAGE exMontañaAt120
+                        DONE
+    > EX  PARED     AT 120
+                        MESSAGE exParedAt120
+                        DONE
+    > EX  PORTAL     AT 123
+                        MESSAGE exPortal
+                        DONE                    
+    > EX  CABAÑA     AT 124
+                        MESSAGE exCabañaAt124
+                        DONE
+   > EX  COSAS     AT 124
+                        MESSAGE exCabañaAt124
+                        DONE
+    > EX  OBJETO     AT 124
+                        MESSAGE exLibroAt124
+                        DONE
+
+> EX  GIGANTE     AT 81
+                            EQ fLOC 0
+                        MESSAGE exGiganteAt81EQTrue
+                        DONE
+    > EX  JAULA     AT 81
+                            EQ fLOC 0
+                        MESSAGE exJaulaAt81EQTrue
+                        DONE
+    > EX  GRIETA     AT 98
+                        ; MESSAGE exGrietaAt98
+                        MESSAGE msgIrrelevante
+                        DONE
+
+    > EX  PIEDRA     AT 124
+                        MESSAGE exPiedraAt124
+                        DONE        
+
+    > EX  UBASUTE     
+                        MESSAGE "Cuando no hay alimento para todo, los más débiles abandonan las tribus para morir en el desierto blanco."
+                        DONE   
+
+    > EX  CHOZA     
+                            AT 1
+                        MESSAGE exChozaAt1
+                        DONE
+                        
+    > EX  PASO     ; 5 PX
+                            AT 130
+                        MESSAGE exPasoAt130
+                        ; PRINT fLOC
+                        NOTEQ fLOC CERRADO
+                        LET fPARAM0 5
+                        NEWLINE
+                        PROCESS pAdd_PX
+                        LET fPARAM0 CERRADO
+                        PROCESS pSetGet_Flag_Loc
+                        ; PRINT fLOC
+                        DONE
+
+
+   > EX  CAJA     
+                            AT 119
+                            EQ fLOC CERRADO
+                        MESSAGE exCajaAt119EQTrue
+                        DONE
+    > EX  CAJA     
+                            AT 119
+                            EQ fLOC ABIERTO
+                        MESSAGE exCajaAt119EQFalse
+                        DONE
+    
+    
+
+> EX  PASO
+    > EX  NIEVE
+                            AT 23
+                        ; MESSAGE exMasaAt23
+                        PROCESS pDynamic_Description
+                        DONE
+
+    > EX  GUERRERO     
+                            AT 25
+                        ; MESSAGE exGuerreroAt25
+                        MESSAGE exGuerreroAtNone
+                        DONE
+
+> EX    GALERIA 
+                    AT 110
+                    MESSAGE "Una roca sobresale la pared de piedra. No parece parte de la galería."
+                    LET fPARAM0 CERRADO 
+                    PROCESS pSetGet_Flag_Loc
+                    DONE
+
+> EX    ROCA
+                    AT 110
+                    MESSAGE "Puedes mover la roca de distintas maneras."
+                    DONE
+
+    > EX  MAR     
+                        MESSAGE exMarAt
+                        DONE
+    > EX NIEVE
+    > EX  PISADAS     
+                            AT 3
+                            EQ fMissiñons_Done 3
+                        MESSAGE exPisadasAt3
+                        DONE
+       > EX NIEVE
+    > EX  PISADAS    
+                            AT 2
+                            EQ fMissiñons_Done 3
+                        MESSAGE exPisadas2At2
+                        DONE
+    > EX  CAMINO      
+                            ; 
+                            AT 133
+                        MESSAGE exCaminoAt133
+                        DONE
+    > EX  HERMANO     
+                            ; 
+                            AT 133
+                        PROCESS Historia_Hermano
+                        DONE
+
+    > EX  UMBRA     
+                            ; 
+                            AT 69
+                        MESSAGE exUmbraAtNone
+                        DONE
+
+
+    > EX  ALDEA     
+                            ; 
+                            AT 1
+                            EQ fMissiñons_Done MISSION_DONE
+                        MESSAGE exAldeaAt128
+                        DONE
+    > EX  PISADAS     
+                            ; 
+                            AT 1
+                        MESSAGE exRastroAt2
+                        DONE
+    > EX  SÍMBOLOS     
+                            ; 
+                            AT 1
+                        MESSAGE exSímbolosAt2
+                        DONE
+    > EX  VOCES     
+                            ; 
+                            AT 1
+                        MESSAGE exVocesAt2
+                        DONE
+> EX  MESA     
+                AT 132
+                MESSAGE exMesaAt132
+                DONE
+    
+;; Irrelevants
+
+> EX  CHOZA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  CAMINO    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  MONTANA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  GUERRERO    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  CADAVER    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  PIRA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  UNDRA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  MONTICULO    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  CRUCE    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  MESETA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  CAVERNA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  PARED    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  ROCA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  MINA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  TUNEL    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  DERRUMBAMIENTO    
+                MESSAGE msgIrrelevante
+                DONE
+
+> EX  CABANA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  LLANURA    
+                MESSAGE msgIrrelevante
+                DONE
+> EX  PLAYA    
+                MESSAGE msgIrrelevante
+                DONE
+
+> EX  CRATER    
+                MESSAGE msgIrrelevante
+                DONE
+
+> EX  NIEVE    
+                MESSAGE msgIrrelevante
+                DONE
+
+
+> EX  DIENTE    
+                AT 132
+                MESSAGE msgIrrelevante
+                DONE
+> EX  SUELO    
+                MESSAGE msgIrrelevante
+                DONE
+    
+
+; Objetos - Troll
+
+> EX  CAJA     PRESENT oCaja
+                            MESSAGE "Hecha de metal muy pesado para contener un gran calor en su interior."
+                            DONE
+> EX  CUERNO     PRESENT oCuerno
+                            MESSAGE "Cuerno hueco cuyo sonido evoca un poder que ya no existe."
+                            DONE
+> EX  GANCHO     PRESENT oGancho
+                            MESSAGE "Gancho unido a una larga vara de madera."
+                            DONE
+
+> EX  BOLA     SYNONYM EX LODO
+> EX  LODO     PRESENT oLodo
+                            MESSAGE "Masa compacta y espesa que oculta los olores."
+                            DONE
+> EX  PIEDRA     PRESENT oPiedra
+                            MESSAGE "Flota porque tiene magia poderosa."
+                            DONE
+> EX  POCION     PRESENT oPocionC
+                    ADJECT1 CURACION
+                            MESSAGE "Recupera 30 puntos de vida."
+                            DONE
+> EX  POCION     PRESENT oPocionI
+                ADJECT1 INVISIBILIDAD
+                            MESSAGE "Te vuelve invisible para los enemigos durante un corto periodo de tiempo."
+                            DONE
+> EX  POCION    PRESENT oPocionI    
+                MESSAGE "Di qué posición quieres examinar."
+                            DONE
+> EX  POCION    PRESENT oPocionC
+                MESSAGE "Di qué posición quieres examinar."
+                            DONE
+> EX  VEJIGA     PRESENT oVejiga
+                            MESSAGE "Vejiga llena de líquido de olor nauseabundo que vuelve locos a los animales."
+                            DONE
+; Examine a item only if you carry it. 
+> EX  OBJETO     PRESENT oObjeto
+                            MESSAGE "No sabes para qué podría servir ni cómo usarlo."
+                            DONE
+
+; Armas
+
+; Examine a item only if you carry it. 
+> EX  ANCLA     PRESENT oAncla
+                            MESSAGE "De un barco que naufrago hace mucho tiempo.#n10 puntos de daño."
+                            DONE
+> EX  CUCHILLO     PRESENT oCuchillo
+                            MESSAGE "Espada corta y resistente forjada por un fuego que ya no existe y portada por los servidores de ese fuego.#n5 puntos de daño."
+                            DONE
+> EX  DAGA     PRESENT oDaga
+                            MESSAGE "Fabricada con el hueso de un dios lleno de ira.#n2 puntos de daño."
+                            DONE
+> EX  HOJA     PRESENT oHoja
+                            MESSAGE "Espada de hoja delgada tan afilada que uno de sus dueños murió esgrimiéndola.#n6 puntos de daño."
+                            DONE
+> EX  LATIGO     PRESENT oLatigo
+                            MESSAGE "Lo utilizan los capataces troll porque es muy efectivo contra los propios trolls helados.#n3 puntos de daño."
+                            DONE
+> EX  MAZA     PRESENT oMaza
+                            MESSAGE "Un palo con un trozo de piedra atada con una tira de cuero.#n3 puntos de daño."
+                            DONE
+> EX  MARTILLO     PRESENT oMartillo
+                            MESSAGE "Un arma fabricada para el uso diario.#n6 puntos de daño."
+                            DONE
+> EX  PICO     PRESENT oPico
+                            MESSAGE "Un pico hecho por unas manos hábiles que no pudieron aprovecharlo.#n5 puntos de daño."
+                            DONE
+
+
+; Enemies
+
+> EX  ARAÑA     
+                        MESSAGE exArañaAtNone
+                        DONE
+    > EX  BEARSERKER     
+                        MESSAGE exBearserkerAtNone
+                        DONE
+    > EX  CAPATAZ     
+                        MESSAGE exCapatazAtNone
+                        DONE
+    > EX  ENGENDRO     
+                        MESSAGE exEngendroAtNone
+                        DONE
+    > EX  GIGANTE     
+                        MESSAGE exGiganteAtNone
+                        DONE
+    > EX  GOLEM     
+                        MESSAGE exGolemAtNone
+                        DONE
+    > EX  SIRVIENTE     
+                        MESSAGE exSirvienteAtNone
+                        DONE
+
+    > EX  POSEIDO     
+                        MESSAGE exPoseidoAtNone
+                        DONE
+    > EX  POSEIDO     
+                        AT 93
+                        MESSAGE exPoseido2AtNone
+                        DONE
+
+    > EX  TROLL     
+                        MESSAGE exTroll
+                        DONE
+
+; Sólo se pueden examinar si están en la LOC actual.
+
+   > EX  CRIATURA     
+                        EQ fLOC B_PHALANX
+                        MESSAGE exCriaturaAtNone
+                        DONE
+    > EX  GUERRERO     
+                        EQ fLOC B_GUARD_TRIBE1
+                        MESSAGE exGuerreroAtNone
+                        DONE
+    > EX  UMBRA     
+                        EQ fLOC B_UMBRA
+                        MESSAGE exUmbraAtNone
+                        DONE
+    > EX  JEFE     
+                        EQ fLOC B_CHIEF_TRIBE2
+                        MESSAGE exJefeTribu2
+                        DONE
+
+
+> EX        BAYA
+                    MESSAGE "Sus propiedades curativas son muy usadas por los chamanes de las tribus."
+                    DONE
+
+> EX        ARBUSTO
+                    AT 26
+                    MESSAGE "Arbusto de hojas gruesas que protegen las bayas del frio." 
+                    DONE
+
+> EX        ARBUSTO
+                    AT 38
+                    MESSAGE "Arbusto de hojas gruesas que protegen las bayas del frio." 
+                    DONE
+
+> EX        ARBUSTO
+                    AT 60
+                    MESSAGE "Arbusto de hojas gruesas que protegen las bayas del frio." 
+                    DONE
+
+> EX        ARBUSTO
+                    AT 96
+                    MESSAGE "Arbusto de hojas gruesas que protegen las bayas del frio." 
+                    DONE
+
+ > EX  KASO     
+                            AT 40
+                             MES exKasoAtNone
+                        MESSAGE exKasoAt40
+                        DONE
+
+> EX  KASO     
+                        MESSAGE exKasoAtNone
+                        DONE
+
+> EX    ALLEGRA
+                        MESSAGE "Las hijas de una bruja de las nieves tienen magia tan poderosa como la de su madre y, a veces, están aún más locas."
+                        DONE
+
+  > EX  CARGAR     
+                       
+                        MESSAGE exCargar
+                        DONE
+    > EX  SALTAR     
+                            
+                        MESSAGE exSaltar
+                        DONE
+    > EX  DECAPITAR     
+                        
+                        MESSAGE exDecapitar
+                        DONE
+
+;----------------------------------------
+
+
+> EQUIPAR ANCLA     CARRIED oAncla
+                    LT fStrong LT_Use_Achor
+                    MESSAGE "No tienes suficiente fuerza."
+                    DONE
+
+> EQUIPAR   _
+
+                    LET fTMP0 201
+                    NOTZERO fNoun
+                    WHATO
+					HASAT 0 ; Atribiuto de arma
+                    CARRIED @51 ; Llevas lo que ahs dicho
+                    COPYBF fWeapon 51
+                    CLEAR fTMP0
+                    OK
+                    
+> EQUIPAR   _
+                    EQ fTMP0 201
+                    SYSMESS sysNoPuedes
+                    CLEAR fTMP0
+                    DONE 
+
+;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Nothing to translate here.
+/PRO 6 ; Inicialización
+
+> _       _    
+
+                CLS
+                ; WINDOW  1               ; Ventana de texto a mitad
+                ; WINAT 14 0
+                ; WINSIZE 25 128
+                ; WINDOW   0
+                ; CLS
+                #ifdef "nativeraster"     ; Grï¿½fico de localidad 0
+                ;    PICTURE 0 
+                ;    DISPLAY 0
+                ;    SKIP $picture0OK
+                #else 
+                    #ifndef "tape48"
+                ;        CLEAR 20
+                ;        XPICTURE 0
+                ;        ZERO 20
+                ;        SKIP $picture0OK
+                    #endif    
+                #endif
+
+#ifndef "splitModeON"                  
+>  _     _      WINDOW  1                   ; Si llegamos Aquí, el grï¿½fico 000 no estaba
+                WINAT 0 0              
+                WINSIZE 25 128             ; Ponemos la pantalla a full screen, salvo si  es split mode
+#endif
+$picture0OK
+
+> _       _     WINDOW 1
+                DESC    0               ; Texto Introducciï¿½n
+                ANYKEY
+                CLS
+                SET   255             
+
+$initLoop                
+> _       _     MINUS   255 1          ; Pone a cero todos los flags
+                NOTEQ   255  fGFlags  ; menos GFlags!!!
+                CLEAR   @255
+
+> _       _     NOTZERO 255             
+                SKIP    $initLoop
+
+> _       _     RESET                     ; Objetos a su loc. inicial / Flag 1
+                LET     fStrength 20
+                LET     fMaxCarr 20
+                SET     fCPronounNoun
+                SET     fCPronounAdject
+                LET fObjectsCarried   1 ; Inicializar este flag con el número de objetos que lleva el jugador de inicio
+
+                PROCESS pInit_Player
+                ; Primera localidad del jugador
+                GOTO    1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;------------------------------------------------------------------------------
+; 
+; Automatic exits listing
+; WARNING! It uses flags 100 and 101
+; 100 = fTMP0 y  101 = fTMP1
+/PRO pExits
+#define NumSalidas 12
+
+
+> _     _       ; No muestra el mensaje en la 126, choza del jefe
+                AT 126
+                DONE
+
+> _     _       ; No muestra el mensaje en la choza de tu líder
+                AT 129
+                DONE
+
+> _     _       ; No muestra el mensaje en las arenas de combate
+                GT fPlayer 133
+                LT fPlayer 138
+                DONE
+
+>
+_       _       MES 0
+                CLEAR fTMP1
+                LET 33 2 ; 33 - Verbo actual; 2 - Norte
+
+; Quitar salidas que están
+				
+>
+_       _       COPYFF 38 fTMP0 ; 38 - LOC del jugador
+                MOVE fTMP0
+                MES @33 ; Del 2 al 11.
+                PLUS fTMP1 1
+
+>
+_       _       PLUS 33 1 ; 3 - S ; etc.
+                LT 33 NumSalidas
+                SKIP -2
+
+; Añadir salidas que no están
+
+> _       _
+                AT 110
+                EQ fLOC ABIERTO ; Habitación secreta.
+                MES 5 ; Oeste
+                DONE
+
+> _       _       NOTZERO fTMP1
+                ; MES "." ; Cambiar pr constante. Sale con un espaciotalk
+;                NEWLINE
+                DONE
+
+>
+_       _       MESSAGE 1 ; No hay ninguna
+				DONE
+
+
+;------------------------------------------------------------------------------
+; SET / GET la bandera de la LOC actual
+; fLOC el valor de la LOC actual
+; Si la posicióna ctual es superio a LIMITE_FLOC siempre devuelve 0 
+; fPARAM0 == SET_FLAG (1); pon en la bandera el valor de fPARAM1
+; fPARAM0 == CLEAR_FLAG; pon en la bandera el valor 0
+; fPARAM0 == ABIERTO; pone la bandera en valor ABIERTO
+; fPARAM0 == CERRADO; pone la bandera en valor CERRADO
+; Otro valor es un get
+/PRO pSetGet_Flag_Loc
+
+> _     _      ; Si la posición del jugador s más alta que límite (125) ya no comprueba la flags
+                ; Y siempre devuelve 0
+                GT 38 LIMITE_FLOC
+                CLEAR fLOC
+                MESSAGE "SetGet por encima del límite."
+                DONE
+
+> _		_		LET fTMP0 OFFSET_ENEMIES
+				ADD 38  fTMP0 ; a la posición del jugador le añadimos el OFFSET
+
+> _		_		EQ fPARAM0 ABIERTO
+				LET fPARAM0 SET_FLAG
+				LET fPARAM1 ABIERTO
+
+> _		_		EQ fPARAM0 CERRADO
+				LET fPARAM0 SET_FLAG
+				LET fPARAM1 CERRADO
+				
+> _		_		EQ fPARAM0 SET_FLAG 
+				;@fTMP0 = fPARMA1
+				COPYBF @fTMP0 fPARAM1
+
+> _		_		EQ fPARAM0 CLEAR_FLAG
+				CLEAR @fTMP0
+                ; MES "Bandera "
+                ; PRINT fTMP0
+                ; MES " valor "
+                ; PRINT @fTMP0
+
+> _		_		COPYFF @fTMP0 fLOC
+                ; MES "Debug "
+                ; PRINT fLOC
+				CLEAR fTMP0
+				CLEAR fPARAM0
+                CLEAR fPARAM1
+				DONE
+
+;
+;
+/PRO pCutScenes ; 9
+
+; Encuentro con tu padre.
+> _     _    
+            AT 16       
+            ZERO fLOC
+            LET fPARAM0 CERRADO
+            PROCESS pSetGet_Flag_Loc
+            NEWLINE
+            MESSAGE "Ves a lo lejos una partida de caza. Sus tatuajes son de la tribu del ojo penetrante." ;  que vuelve a tu aldea
+            MESSAGE "Cuando están más cerca, reconoces a tu padre. Vuelven sin nada." ; con las manos vacías
+            ; Vuelven cabizbajos por no haber cobrado pieza.
+            ; MESSAGE ""
+            MESSAGE "La expresión de tu padre se vuelve seria cuando le cuentas tu misión." ; conversación con el líder de la tribu y tu 
+            MESSAGE "'Es hora de que te conviertas en adulto. A veces, hay más valor en hacer lo que debes que en luchar'"
+            MESSAGE "Tu padre busca algo entre sus pieles y te da un frasco." ;pequeño frasco de líquido, que guardas.
+            ; un pequeño giro puede abrir nuevos caminos
+            MESSAGE "'Me lo dio un ermitaño. Me dijo que era magia que podría salvarme. Ahora es tuya'" ;  cuando le ayudé a asentarse en la cima de la montaña ; , por esos siempre lo llevo conmigo
+            MESSAGE "Te despides de tu padre y continúas tu camino." ; ambos continuáis vuestro camino.
+            CREATE oPocionI ; Lo traigo a esta localidad
+            GET oPocionI ; Lo pongo en el inventario del jugador
+            NEWLINE
+            ; Puntos de experiencia
+            ANYKEY
+            LET fPARAM0 10
+            PROCESS pAdd_PX
+            DONE
+;
+> _     _    
+            AT 126
+            ; No me importa que se repoita las veces que el jugador quiera.       
+            NEWLINE
+            MESSAGE "El jefe está sentado en un trono hecho de una canoa. Un gran búho blanco. posado sobre el trono, te mira fijamente." ;  detrás del trono
+            MESSAGE "Transmites el mensaje de tu líder. El búho y el jefe menean la cabeza con desaprobación."
+            MESSAGE "'La nieve bloquea el paso al gran lago. Si no lo abrimos pronto moriremos de hambre. Si quieres que confiemos, abre el paso'" ; antes del invierno
+            MESSAGE "Tardarías cien años o más en quitar toda la nieve. El jefe se ríe de ti." ; Te quejas.  ;  y te llama kala
+            MESSAGE "Te cuenta que usaban el cuerno del retumbar para quitar la nieve, pero que desde que los gigantes atacaron la aldea, no lo han vuelto a ver."
+            MESSAGE "'Kala, busca el cuerno. Búscalo lejos de la aldea'"
+            MESSAGE "El buho despliega sus alas y el jefe concluye tu audiencia."
+            ANYKEY
+            ; LET fPARAM0 15
+            ; PROCESS pAdd_PX
+            ; Teletransportar a la salida de la aldea.
+            GOTO 25
+            RESTART
+;
+> _     _    
+            AT 84 
+            LT fDead_Posesed Dead_Posesed_Limit    ; Aún no he matado a los poseidos
+            ; ZERO fLOC ; No puedo volver si cumplo la misisón.
+            ; LET fPARAM0 CERRADO
+            ; PROCESS pSetGet_Flag_Loc
+            NEWLINE
+            MESSAGE "Entrar solo en una aldea de otra tribu significa muerte. Por eso tienes la mano sobre la empañadura de tu arma." ; Por ser mensajero de tu líder haces una excepción, pero con la mano sobre la empañadura de tu arma.
+            MESSAGE "Una niña sale de una choza y grita."
+            MESSAGE "Una turba de ancianos, enfermos y niños salen de las chozas armados con palos, horcas y taburetes rotos."
+            MESSAGE "Gritas que vienes en paz. Un anciano tembloroso intenta golpearte, pero tropieza y cae delante de ti." ;y él solo
+            MESSAGE "Como no pueden matarte, te escuchan."
+            ; Esta curscene solos e desactiva cuando les dices que le vas a ayudar.
+            ; O cuando ya has matado a los poseidos.
+            DONE
+;
+> _     _  
+            ; Esta cuscene también se desactiva si llegas antes a la loc del gigante enjaulado.
+            AT 67       
+            ZERO fLOC
+            LET fPARAM0 SET_FLAG ; Se ha visto la curscene
+            LET fPARAM1 HECHO
+            PROCESS pSetGet_Flag_Loc
+            NEWLINE
+            MESSAGE "El suelo comienza a temblar."
+            MESSAGE "Un gigante de hielo atraviesa la llanura corriendo desesperadamente." ;aparece por la llanura y la cruza corriendo desesperadamente.
+            MESSAGE "Un instante después aparece un mamut lanudo que persigue al gigante. Lo monta Allegra, la hija mediana de la bruja de las nieves."
+            MESSAGE "Detrás, llega un segundo mamut lanudo. Lo monta el prometido de Allegra quien hace esfuerzos acrobáticos para no hacer al suelo."
+            MESSAGE "En un instante, el gigante y los mamuts desaparecen y la llanura vuelve a estar desierta."
+            NEWLINE
+            ; +10 PX
+            LET fPARAM0 10
+            PROCESS pAdd_PX
+            DONE
+;
+
+> _     _   AT 46
+            EQ fGiganteTeDaPaso HECHO
+            DONE
+> _     _    
+            AT 46
+            ; Guardian vivo
+            ; MESSAGE "46"
+            NOTEQ fLOC 0
+            ;MESSAGE "vIVO"
+            ; MESSAGE "No abierto"
+            NEWLINE
+            MESSAGE "Un puño cae el cielo haciendo temblar el suelo." ; gigante ; Antes de dar un paso, 
+            MESSAGE "Tras él, la cara del gigante guardián te advierte que no eres bienvenido."
+            ; MESSAGE "ESTA CUTSCENE SE REPITE HASTA QUE MATES AL GIGANTE O LIBERES AL GIGANTE ENCADENADO"
+            
+            ; Gigante liberado
+            EQ fGigante_Liberado ABIERTO
+            NEWLINE
+            ANYKEY
+            NEWLINE
+            MESSAGE "Otro gigante aparece. Lo reconoces porque lo liberaste de la jaula de Allegra."
+            MESSAGE "Ambos gigantes se gritan. Finalmente, el gigante guardián te permite el paso." ; guardian
+            LET fGiganteTeDaPaso HECHO
+            DONE
+
+>   _       _
+                AT 81
+                ZERO fLOC
+
+                NEWLINE
+                MESSAGE "Ves a un gigante encerrado en una jaula."
+
+                ; Comprobar si vi la cutscene de Allegra
+                ;                                                 Este gigante estaba siendo perseguido 
+                EQ 137 HECHO ;  Si estaba a cerrado al llgar es que se ha hehco la cutscene.
+                MESSAGE "Era el gigante perseguido por Allegra, la hija mediana de la bruja de las nieves."
+                DONE
+
+; Desactivo la cutscene si ahs llegado aquí antes de verla
+; Esto funciona como ELSE
+>   _       _
+                AT 81
+                ZERO fLOC
+                NOTEQ fTMP0 HECHO
+
+                ; Desactivo la cutscene en la que ves aAgne spersiguiendo al gigante. degub
+                ; Da igual si la ahs visto o no.
+                LET 137 CERRADO ; (67 + 70) hAY QUE sumar el offset
+                DONE
+
+
+;
+> _     _
+            AT 80
+            ; Solo la primera vez
+            ZERO fLOC
+            EQ fGigante_Liberado ABIERTO
+            ; La desactiva
+            LET fPARAM0 CERRADO
+            PROCESS pSetGet_Flag_Loc
+            NEWLINE
+            MESSAGE "El suelo tiembla y corres a esconderte en la nieve."
+            MESSAGE "Allegra, la hija mediana de la bruja de las nieves, aparece a lomos de su mamut peludo."
+            MESSAGE "Frena en seco cuando ve que su gigante no está. Su grito de rabia provoca un pequeño alud." ; e ira ;  y hace que te piten los oídos
+                   ; El segundo mamut llega un poco después y el prometido de Allegra también desmonta.
+            MESSAGE "El mamut del prometido de Allegra llega un poco después."
+            MESSAGE "'¿Por qué tanto interés por un bruto apestoso?'"
+            MESSAGE "Ignorándole, Allegra se acerca al cráter y examina los restos."
+            MESSAGE "'Volvamos al palacio, querida. Te regalaré algo digno de ti. Precisamente acaban de llegar los purasangres de tu dote.'"   ;  Un escorpión de la tierra de fuego o un tentáculo del inframundo. ;  mía
+             MESSAGE "Allegra monta de nuevo su mamut." 
+              MESSAGE "'Se me ocurre algo divertido que hacer con los caballos'"  ; . Volvamos, querido mío
+               MESSAGE "Ambos mamuts abandonan el claro." ; Aún te pitan los oídos. 
+            NEWLINE
+            DONE
+
+; Encuentro con Agatha.
+> _     _
+            AT 77 ; 
+            ; No necesito comproar más. si he llegado hasta aquí esque cumple las condiciones.
+            PLACE oObjeto DESTROYED
+            NEWLINE
+            MESSAGE "Una mujer, sentada junto a una mesa, contempla el embravecido mar."
+            MESSAGE "Sobre la mesa ves más objetos extraños. Dejas el que llevas."
+            NEWLINE
+            NEWLINE
+            MESSAGE "'Cuándo éramos pequeñas, mi madre nos regaló un pájaro recién nacido a cada una'"
+            MESSAGE "'Una de mis hermanas lo mató'" ; inmediatamente
+            MESSAGE "'Cuando le pregunté por qué lo había hecho, me contestó que porque podía'"
+            MESSAGE "'Otra de mis hermanas lo encerró en una jaula tan pequeña que apenas podía moverse'"
+            MESSAGE "'Cuando le pregunté por qué lo había hecho, me contestó que porque le divertía'"
+            NEWLINE
+            ANYKEY
+            NEWLINE
+            MESSAGE "'Yo lo cuidé y lo alimenté como una madre a su hijo'"
+            MESSAGE "'Creció e intentó arrancarme los ojos'"
+            MESSAGE "'Cuando le pregunté por qué lo había hecho, me graznó que era su naturaleza'"
+            NEWLINE
+            MESSAGE "'Pobre criatura, has tenido en tus manos el libro más bello jamás escrito. Ni lo sabrás nunca. Es tu naturaleza'" ;  sabías ni lo podrás saber
+            ; Las criaturas débiles no podéis cambiar vuestra existencia. Las fuertes podemos cambiar el mundo
+            MESSAGE "'Las criaturas débiles no podéis cambiar pero las fuertes podemos cambiar vuestro mundo'"
+            MESSAGE "'Esa es mi naturaleza'"
+            NEWLINE
+    ANYKEY
+            NEWLINE
+            MESSAGE "Agatha contempla el mar en silencio. Debes marcharte."
+            
+            NEWLINE
+            ANYKEY
+            LET fAgatha HECHO ; Lo marco para el final del juego
+            GOTO 75
+            RESTART
+
+; Choza del l´dier, al principio de la aventura
+> _     _
+            AT 129
+            ; Si Phalanx no está activo
+            NOTEQ fMissiñons_Done ALL_MISSIONS
+            ; Se repite siempre que entres.
+            ; NEWLINE
+            MESSAGE "Tu líder gobierna con sabiduría y prudencia, pero ya estás aburrido de la prudencia. Eres el mejor guerrero y estás listo para liderar a tu tribu y conquistar a vuestros enemigos."
+            MESSAGE "Hoy te mira preocupado. La vejez se nota en su cara."
+            MESSAGE "'Las brujas de las nieves, antaño benefactoras, ahora nos saquean y esclavizan mientras morimos de hambre y enfermedad'" 
+            MESSAGE "'Pero no hay mayor poder en el desierto blanco que el poder de todas las tribus. Juntos, sobreviviremos'"
+            MESSAGE "'Te confío nuestra supervivencia. Ve a otras tribus y escúchalas. Ayúdalas como si fuera tu propia tribu. Enséñales que es más fuerte lo que nos une que lo que nos separa'" 
+            ANYKEY
+            MESSAGE "Traición. Agarras tu arma dispuesto a matar a tu débil líder. En el último instante frenas tu impulso. Aún es tu líder y has de obedecerle."
+            MESSAGE "'Tres tribus debes encontrar. Una al oeste, cerca del gran lago. Otra está al este, al calor de la gran cordillera. Otra al norte, en las vastas llanuras'"
+            MESSAGE "Sales de choza y te preparas para un largo viaje, probablemente a la muerte."
+            NEWLINE
+            ANYKEY
+            ; Lo sacamos fuera de la choza.
+            GOTO 1
+            RESTART
+
+;-------------
+;--- Cutscenes de fin de misiones
+
+> _     _    
+            AT 25
+            EQ fLOC_Paso ABIERTO ; Bandera de la loc del paso cubiertod e nieve.
+            LET fPARAM1 MISSION_DONE
+            LET fPARAM0 SET_FLAG
+            PROCESS pSetGet_Flag_Loc
+            PLUS fMissiñons_Done 1 ; Una misisón más hecha
+            NEWLINE
+            MESSAGE "Toda la tribu se prepara para salir a pescar."
+            MESSAGE "Un búho blanco se posa frente a ti. Poco después, el jefe de la tribu llega."
+            MESSAGE "'Hemos sentido el retumbar. Ahora podremos alimentar a los nuestros'"
+            MESSAGE "'Te permito marchar con vida. Dile a los tuyos que tendrán nuestros peces como agradecimiento y nuestras lanzas si venís a nuestra nieve'" ; los filos de nuestras armas
+            MESSAGE "Ya no tienes nada más que hacer aquí. Vuelves al desierto blanco."
+            NEWLINE
+            LET fPARAM0 80 ; Puntos de experiencia ; 
+            PROCESS pAdd_PX
+            GOTO 24
+            ANYKEY
+            RESTART
+
+> _     _    
+            AT 69
+            CARRIED oCaja
+            DESTROY oCaja
+            LET fPARAM1 MISSION_DONE
+            LET fPARAM0 SET_FLAG
+            PROCESS pSetGet_Flag_Loc
+            PLUS fMissiñons_Done 1 ; Una misisón más hecha
+            NEWLINE
+            MESSAGE "Llegas portando el calor." ; Toda la aldea se congrega a tu alrededor.
+            MESSAGE "El chamán llega corriendo. Jadeante, te lo arranca de las manos pues eres indigno de tocarlo, y lo levanta. La tribu estalla en gritos de celebración." ; júbilo y 
+            MESSAGE "Después, marchan a las afueras para que sus muertos nunca más vuelvan a sentir el frio." ;honrar a sus muertos y que nunca más vuelvan a sentir el frio.
+            ; MESSAGE "Umbra se ha quedado atrás."
+            MESSAGE "Umbra te dice: 'Si nos traicionas, yo misma te meteré en la tumba en la que debe estar un soweli infiel'" ; Hoy eres soweli. 
+            MESSAGE "Ya no tienes nada más que hacer aquí. Vuelves al desierto blanco."
+            LET fPARAM0 PX_MISSION ; Puntos de experiencia
+            PROCESS pAdd_PX
+            GOTO 68
+            ANYKEY
+            RESTART
+
+> _     _    
+            AT 84
+            GT fDead_Posesed Dead_Posesed_Limit ; Has matado suficientes poseidos
+            ; Bandera a 255, misión hecha
+            LET fPARAM1 MISSION_DONE
+            LET fPARAM0 SET_FLAG
+            PROCESS pSetGet_Flag_Loc
+            PLUS fMissiñons_Done 1 ; Una misisón más hecha
+            NEWLINE
+            ; Los ancianos, enfermos y niños vuelven a reunirse a tu alrededor. 
+            ; MESSAGE "El hedor de la muerte te precede."
+            MESSAGE "La tribu sin guerreros se congrega a tu alrededor. El viejo chamán te da un objeto."
+            MESSAGE "'Nuestros padres, hijos y hermanos descansan en paz. Toma nuestro colmillo en señal de gratitud'"
+            MESSAGE "Una niña que nunca será mujer te grita: 'si nos hubieras ayudado antes, la hija de bruja no habría poseído a nuestra tribu'" ; poseído a nuestros padres y hermanos
+            ; No es tarea de otra tribu protegernos. ; . Ya estábamos condenados
+            MESSAGE "El anciano ciego mueve la cabeza. 'Nadie es rival para una bruja o hija de bruja'" 
+            ;  La tribu del colmillo desaparecerá como otras antes que ella.
+            MESSAGE "Sin guerreros y cazadores, la tribu parte al ubasute."
+            MESSAGE "Ya no tienes nada más que hacer aquí. Vuelves al desierto blanco."
+            NEWLINE
+            ; Darle la daga
+            CREATE oDaga ; Lo traigo a esta localidad
+            GET oDaga ; Lo pongo en el inventario del jugador
+            LET fPARAM0 PX_MISSION ; Puntos de experiencia
+            PROCESS pAdd_PX
+            GOTO 83
+            ANYKEY
+            RESTART
+
+
+; Phalanx
+> _     _ 
+            ;AT 140
+            AT 129
+            ; Si Phalanx no está activo
+            EQ fHP_Enemy 0
+            ; He hecho todas las misiones
+            EQ fMissiñons_Done ALL_MISSIONS            
+            ; NEWLINE
+            MESSAGE "Escuchas un grito inhumano."
+            MESSAGE "Lentamente, una terrible criatura se arrastra desde el interior de la choza."
+            ; Reconoces al líder, al chamán, y también a tu padre y su partida de caza. ; 
+            MESSAGE "Toda la aldea está allí, incluso las mujeres y los niños, unidos en la criatura. Las caras te miran y gritan de sufrimiento." ; que conoces 
+            MESSAGE "Te inunda la ira. Debes luchar o huir."
+            ; Activar Phalanx
+
+            ; Poner aPhalanx en todas las locs
+            LET 71 B_PHALANX
+            LET 198 B_PHALANX
+            LET 201 B_PHALANX
+            LET 200 B_PHALANX
+            LET 203 B_PHALANX
+
+            ; GOTO 134
+            GOTO 1
+            ANYKEY
+            RESTART 
+
+; Tirar a Phalanx por el paso
+> _     _ 
+            AT 133
+            ; Phalanx acttivo
+            NOTZERO fHP_Enemy
+            NEWLINE
+            MESSAGE "Corres por la nieve. No te detienes cuando llegas al camino."
+            MESSAGE "La criatura se arrastra tras de ti. Comienzas a escuchar el sonido de la nieve cayendo al vacío." ; Es tan rápida como tú. 
+            MESSAGE "Te arden los pulmones, pero no paras. Parar significa muerte." ; Las fuerzas te fallan. 
+            ; Sientes a  retorcerse 
+            MESSAGE "La criatura grita cuando comienza a caer. Con tus últimas fuerzas, saltas justo cuando la nieve desaparece bajo tus pies." ; nota que 
+            MESSAGE "Después nada." ; , por fin puedes descansar.
+            ANYKEY
+            MESSAGE "No te rindes."
+            MESSAGE "Agitas los brazos en el vacío. Tus dedos rozan algo áspero." ; Sigues moviéndote en el vacío. Agitas los brazos
+            MESSAGE "Brota sangre. Ignoras el dolor. La roca te destroza las manos, pero detiene tu caída." ; Vivirás otro día.
+            ; los gritos de
+            MESSAGE "Con las manos hinchadas y entumecidas, logras trepar y salir de la sima. Ya no escuchas a la criatura, ni las risas invisibles."
+            MESSAGE "Tu tribu descansa en paz. Tu hermano la protegerá hasta que te reúnas con ella."
+            ; MESSAGE ""
+
+            ANYKEY
+            ; Desactivar Phablaxk
+            CLEAR fHP_Enemy
+            LET fPARAM0 CLEAR_FLAG
+            PROCESS pSetGet_Flag_Loc
+
+            ; Ir al final que corresponda.
+            PROCESS Show_Ending ; Show_Ending
+            DONE 
+
+; fHP, fHP_MAX, SUMAR, RESTAR
+;--------------------------
+; Suma HP.
+; Método para sumar HP al jugador y que no pase de los máximos.
+; Parámetros: fPARAM0 cantidad a sumar
+; Parámetros: fPARAM1 SUMAR - Suma / RESTAR resta
+; Salida; No
+/PRO pChange_HP 
+
+> _		_		; Ojo, no tiene en cuenta el debordamiento al sumar. 
+				; Si excedde de 255 se queda en 255
+				; fHP = fHP + A
+				EQ fPARAM1 SUMAR
+				ADD fPARAM0 fHP
+				BIGGER fHP fHP_MAX
+				COPYBF fHP fHP_MAX
+                MES "Ganas "
+                PRINT fPARAM0
+                SYSMESS sysPuntosDeVida
+
+> _		_		EQ fPARAM1 RESTAR
+				SUB fPARAM0 fHP
+				;NOTZERO fRETURN0		
+				;ZERO fHP
+				;DONE
+                MES "Pierdes "
+                PRINT fPARAM0
+                SYSMESS sysPuntosDeVida
+                ;
+
+; Tengo la barra de estatus puedo quitar esto.
+> _		_		;INK C_STATS
+				MES " Tienes "
+				PRINT fHP
+				SYSMESS sysPuntosDeVida
+                NEWLINE
+				;INK C_TEXTO
+				; DONE
+
+; ¿Comprobar si ha muerto
+> _     _       
+                ZERO fHP
+                MESSAGE "Has muerto. Pronto estarás ante tu dios para luchar a su lado en el fin de los tiempos."
+                END
+
+
+;--------------------------
+; Método para calcular la tirada de ataque.
+; quién lalme a este método debe detemrinar si ha impactado o no.
+; Parámetros: fPARAM0: PLAYER - Ataca el jugador, ENEMY - Ataca el enemigo,
+; fPARAM1 el ataque d ela criatura. Si e player, coge su fuerza.
+; fPARAM1 Si es player PARAM1 tiene modificador de ataque
+; fPARAM2 LA DEFENSA DE LA CRIATURA. sI ES ENEMIGO coge la defensa del jugador.
+; fRETURN0 resultadod e la tirada + fuerza + el valor acumulado
+; fRETURN1 0 si ha fallado, 1 si ha impactado
+
+/PRO pAttack_Roll ; 11
+
+> _ 	_		CLEAR fRETURN0 ; Return indica que falla
+
+; Sumamos el acumulado
+> _     _       EQ fPARAM0 PLAYER
+                COPYBF fRETURN0 fAC_PLAYER
+                ; Ahora la fuerza NO se suma al daño
+                ; COPYBF fPARAM1 fStrenght ; Coge la fuerza del jugador
+                ADD fStrong fPARAM1
+                ;
+
+; Enemigo
+> _     _       EQ fPARAM0 ENEMY
+                COPYBF fRETURN0 fAC_ENEMY ; fRETURN0 = fAC_ENEMY
+                COPYBF fPARAM2 fDefense ; Coge la defensa del jugador
+                ;CLEAR fPARAM1
+
+
+; Enemigo derribado
+> _     _       EQ fEnemy_State DERRIVADO_2
+                EQ fPARAM0 PLAYER ; Solo si ataca el jugador
+                MESSAGE "Atacas al enemigo derribado."
+                ; Calcular extras del ataque
+                PLUS fPARAM1 BONIFICADOR_DERRIBADO
+                ; Aquí no podemos poner el daño.
+
+
+; Calculamos la tirada de ayaque
+> _     _       ; Debug
+                ;MESSAGE "Attack Roll Debug:"
+                ;NEWLINE
+				
+                RANDOM fTMP1
+                ; sumamos el aleatorio
+                ADD fTMP1 fRETURN0
+                
+                ; Sumamos el ataque
+                ADD fPARAM1 fRETURN0
+                
+
+                ; Tiene que ser mayor estricto que la defensa
+                CLEAR fRETURN1
+                ; Si es mayor que fParam 2 es que impacta
+
+                BIGGER fRETURN0 fPARAM2
+                SET fRETURN1
+                
+; El juagdor ataca y no impacta
+> _     _       EQ fPARAM0 PLAYER
+                ZERO fRETURN1
+
+                PLUS fAC_PLAYER ATQ_INCREMENT ; 15 by default
+
+                DONE
+
+; El enemigo ataca y no impacta
+> _     _       EQ fPARAM0 ENEMY
+                ZERO fRETURN1
+                PLUS fAC_ENEMY ATQ_INCREMENT_ENEMY ; 5 by default
+                DONE
+
+; El juagdor ataca y impacta
+> _     _       EQ fPARAM0 PLAYER
+                NOTZERO fRETURN1
+                CLEAR fAC_PLAYER 
+                DONE
+
+; El enemigo ataca y no impacta
+> _     _       EQ fPARAM0 ENEMY
+                NOTZERO fRETURN1
+                CLEAR fAC_ENEMY
+                DONE
+
+
+;------------------------
+; INIT PLAYER
+; Aldo set te enemies in their locations.
+/PRO pInit_Player ; 12
+
+> _     _
+    LET fHP INITIAL_HP
+    LET fHP_MAX INITIAL_HP
+    LET fWeapon oMaza 
+    LET fDefense INITIAL_DEFENSE
+    PROCESS Set_Arbustos_Enemies
+
+> _		_       ; Initial flags of the enemies
+
+                ; Unicps
+                LET 84 B_ENGENDRO
+                LET 116 B_GIGANTE_DE_HIELO ; El gigante guardian es único, así si lo matas no vuelve a aparecer por si liberas depsués al gigante
+                LET 129 B_ARANA_BLANCA ; LOC 59, antiguo amnésico
+                LET 133 B_BEARSERKER
+
+                LET 204 B_GUARD_TRIBE1
+                LET 206 B_UMBRA
+                LET 207 B_CHIEF_TRIBE2
+                DONE
+
+
+;-------------------------------------------------
+; PROBAR
+; fPARAM0 - PX que ganas
+; Chaick if gain level
+/PRO pAdd_PX ; 13
+
+> _		_			; Add PXs
+					;INK C_STATS
+					ADD fPARAM0 fPX
+					MES "Ganas "
+					PRINT fPARAM0
+					SYSMESS sysPX
+					;NEWLINE
+					SPACE
+                SET fTMP0
+
+$subir_nivel
+> _     _
+					; Comprobar si sube de nivel
+					GT fPX GT_PX_LEVEL
+
+                    ; Subir vida
+                    PLUS fHP_MAX HP_PER_LEVEL
+                    COPYBF fHP fHP_MAX
+
+                    ; Puntos de atrtributo
+                    PLUS fAttribPoints ATTRIB_POINTS_PER_LEVEL
+
+                    ; Restar PX
+                    MINUS fPX PX_PER_LEVEL
+
+                    ; Subir nivel
+                    PLUS fLevel 1
+                    MESSAGE "Subes un nivel."
+                     CLEAR fTMP0
+                     ; 
+
+> _     _
+            ZERO fTMP0 ; Subo un nivel.
+            EQ fLevel 2
+            SYSMESS  sysArteCombate
+            MESSAGE "Cargar.#n"
+
+> _     _
+            ZERO fTMP0 ; Subo un nivel.
+            EQ fLevel 4
+            SYSMESS  sysArteCombate
+            MESSAGE "Saltar.#n"
+                   
+> _     _
+            ZERO fTMP0 ; Subo un nivel.
+            EQ fLevel 7
+            SYSMESS  sysArteCombate
+            MESSAGE "Decapitar.#n"
+            ; DONE
+
+; Comprobar si puedo subir otro nivel.
+> _     _
+            GT fPX PX_PER_LEVEL
+            SKIP $subir_nivel
+
+; Siempre recuerdo los niveles
+> _		_		; NOTZERO fTMP0
+                
+                ; Muestra los puntos de experiencia
+				SYSMESS sysYou_have ;"You have "
+				PRINT fPX
+				SYSMESS sysPX ;" experience points.
+				NEWLINE
+
+				CLEAR fTMP0
+				; INK C_TEXTO
+				DONE
+
+;-------------------------------------------------
+;
+/PRO pDynamic_Description ; 14
+
+> _     _    
+            AT 23       
+            EQ fLOC 0
+            NEWLINE
+            MESSAGE exMasaAt23EQTrue 
+            ; "Una gran masa de nieve bloquea el paso al gran lago." ; 
+            DONE
+> _     _    
+            AT 23       
+            EQ fLOC ABIERTO
+            NEWLINE
+            MESSAGE "El paso está despejado."
+            DONE
+
+> _     _
+            AT 95
+            EQ fDead_Posesed 255
+            NEWLINE
+            ; cuerpos de los 
+            MESSAGE "Ves los poseídos que se han matado entre ellos." ;  después de beber del caldero
+            DONE
+
+; La caja
+> _     _
+            AT 118 ; Estopy dodne Agnes
+            CARRIED oCaja ; Llevo la caja
+            NEWLINE
+            MESSAGE "Agnes nota la presencia de la caja."
+            MESSAGE "Antes de que puedas hacer nada, te lanza un vórtice mágico que te succiona."
+            MESSAGE "La caja se escapa de tus manos." ;  y cae en la caverna
+            MESSAGE "Caes en una espiral mágica hasta que la nieve te detiene en seco." ; Aterrizas sobre la nieve.
+            NEWLINE
+            LET 162 B_POSEIDO
+            ; La caja vuelve a su sitio
+            PLACE oCaja 119
+            ; Coloco la caja en sue structura
+            CLEAR fLOC_Box
+            ;CLEAR fTMP0
+            GOTO 92
+            ANYKEY
+            RESTART
+
+> _     _    
+            AT 119       
+            EQ fLOC 0
+            NEWLINE
+            MESSAGE "La fundición es calentada por una caja metálica dentro de la fundición." ; colocada dentro de la estructura de la fundición.
+            DONE
+
+; Bayas
+> _     _       
+            EQ fLOC ARBUSTONOBAYA
+            NEWLINE
+            MESSAGE msgArbustoLanudo
+            DONE
+> _     _    
+            EQ fLOC ARBUSTOBAYA
+            NEWLINE
+            MESSAGE msgArbustoLanudoconBaya
+            DONE
+
+> _     _    
+            AT 133    ; El camino.
+            EQ fLOC 0 ; Phanlanx no esá activado
+            ; NEWLINE
+            MESSAGE " No es necesario que demuestres tu valor."
+            DONE
+
+; final del juego
+
+> _     _
+            AT 1
+            EQ fMissiñons_Done ALL_MISSIONS
+            MESSAGE "#nTu aldea está desierta. El silencio es absoluto, salvo por las voces que se ríen que no puedes ver.#nVes extraños símbolos dibujados en la nieve." ; rastros de muchas pisadas y 
+            DONE
+
+> _     _
+            AT 2
+            EQ fMissiñons_Done ALL_MISSIONS
+            NEWLINE
+            MESSAGE msgPisadasRecientes
+            DONE
+
+> _     _
+            AT 3
+            EQ fMissiñons_Done ALL_MISSIONS
+            NEWLINE
+            MESSAGE msgPisadasRecientes
+            DONE
+
+;-------------------------------------------------
+; 
+/PRO pCheck_State ; 15
+
+> _     _   ; No hay estado
+            ZERO fState
+            DONE
+
+> _     _   ; Suma 1
+            PLUS fStateCounter 1
+            CLEAR fTMP0
+
+> _     _   ; Invisibilidad
+            EQ fState INVISIBLE
+            GT fStateCounter INVISIBLE_TIME ; Activa durante 6 localidades
+            NEWLINE
+            MESSAGE "El efecto de la poción de invisibilidad termina."
+            LET fTMP0 27
+
+> _     _   ; EMBARRADO
+            EQ fState EMBARRADO
+            GT fStateCounter 11 ; Activa durante 10 localidades
+            NEWLINE
+            MESSAGE "El barro se deshace."
+            LET fTMP0 27
+
+> _     _   ; Vegiga termina
+            EQ fState APESTOSO
+            GT fStateCounter 7 ; Activa durante 6 localidades
+            NEWLINE
+            MESSAGE "El olor de la vejiga desaparece."
+            LET fTMP0 27
+
+> _     _   ; Vejiga no termina
+            EQ fState APESTOSO
+            NOTEQ fTMP0 27
+            PROCESS Set_WolfPack
+            DONE
+
+> _     _
+            EQ fTMP0 27
+            CLEAR fTMP0
+            NEWLINE
+            CLEAR fState
+            CLEAR fStateCounter
+            DONE
+
+
+;-------------------------------------------------
+; 
+/PRO pStatus_Bar ; 16
+;
+> _		_		
+				SYSMESS sysPV
+                PRINT fHP
+                MES " -- Experiencia:"
+                PRINT fPX
+                MES " -- "
+                SYSMESS sysYourLvl
+                PRINT fLevel
+				NEWLINE ; El etxto no esté pegado
+                MESSAGE "----------------------------------------"
+                DONE
+
+;-------------------------------------------------
+; Stats / Estadistica / Est
+; 
+/PRO pEstadisticas ; 17
+> ESTADISTICAS _		
+				MESSAGE "Tus estadísticas." 
+				; Vida
+                SYSMESS sysPV
+                SPACE
+                PRINT fHP
+				MES " / Vida máxima: "
+				PRINT fHP_MAX
+                NEWLINE
+                MES "Puntos de experiencia: "
+                PRINT fPX
+                MES " / "
+                SYSMESS sysYourLvl
+                SPACE
+                PRINT fLevel
+                NEWLINE
+                ; La defensa solo se icnrementa subiendo la destreza
+                MES "Defensa: "
+                PRINT fDefense
+                NEWLINE
+
+                ; Atributos
+                MES "Fuerza: "
+                PRINT fStrong ; fStrenght
+                NEWLINE
+                MES "Destreza: "
+                PRINT fDexterity
+                NEWLINE
+                MES "Constitución: "
+                PRINT fConstitution
+                NEWLINE
+
+                ; Puntos de atributos a gastar
+                MES "Puntos de atributos: "
+                PRINT fAttribPoints
+				NEWLINE
+
+				
+; Efectos
+> ESTADISTICAS _
+            ; No hay estado
+            ZERO fState
+            DONE  
+
+> ESTADISTICAS _
+            ; Invisibilidad
+            EQ fState INVISIBLE
+            MESSAGE "Eres invisible."
+            DONE
+
+> ESTADISTICAS _
+        ; EMBARRADO
+            EQ fState EMBARRADO
+            MESSAGE "Estás cubieto de lodo."
+                DONE
+
+> ESTADISTICAS _
+        ; Vegiga
+        EQ fState APESTOSO
+        MESSAGE "Tu penetrante olor atrae a critaturas."
+        DONE
+
+
+
+;--------------------------------------------
+; Show weapon in inventory
+
+/PRO Print_Weapon_Name
+
+> _     _        
+                 EQ fWeapon oAncla
+                 MESSAGE "Ancla oxidada"
+                            DONE
+
+> _     _        
+                 EQ fWeapon oCuchillo
+                 MESSAGE "Cuchillo de servidor"
+                            DONE
+
+> _     _        
+                 EQ fWeapon oDaga
+                 MESSAGE "Daga sagrada de la tribu del colmillo"
+                            DONE
+
+> _     _        
+                 EQ fWeapon oHoja
+                 MESSAGE "Hoja delgada"
+                            DONE
+
+> _     _        
+                 EQ fWeapon oLatigo
+                 MESSAGE "Látigo de capataz"
+                DONE
+
+> _     _        
+                 EQ fWeapon oMaza
+                 MESSAGE "Maza de bárbaro"
+                DONE
+
+> _     _        
+                 EQ fWeapon oMartillo
+                 MESSAGE "Martillo de herrero"
+                            DONE
+
+> _     _        
+                 EQ fWeapon oPico
+                 MESSAGE "Pico de minero"
+                            DONE
+
+
+;--------------------------------------------
+; Chek monster
+/PRO Check_Enemy ;
+
+
+> _       _
+                LT fLoc LT_ENEMY
+                ; no hay enemigo, limpiar HP
+                CLEAR fHP_Enemy
+                CLEAR fLook
+                DONE
+                
+> _       _     ; GT fLOC LAST_ENEMY
+				ZERO fHP_Enemy ; Aún no ha sido activado
+				; Si entro aquí hay un enemigo
+				PROCESS Create_Enemy
+				DONE
+
+> _        _
+                EQ fLook 255
+                CLEAR fLook
+                NEWLINE
+                MESSAGE "Hay un enemigo aquí."
+                DONE
+
+> _     _       ; Si está activada la invisisbilidad el enemigo no ataca
+                EQ fState INVISIBLE
+                MESSAGE "El enemigo no te ve."
+                DONE
+
+> _		_		; GT fLOC LAST_ENEMY
+				NOTZERO fHP_Enemy ; Ya estaba activado
+				; Si entro aquí el enemigo ataca
+				PROCESS Enemy_Attacks
+				DONE
+
+;------------------------------------------
+;
+/PRO Create_Enemy 
+
+> _		_		SET fHP_Enemy
+                NEWLINE
+
+                MES "Hay un"
+                ; Reseteo el status
+                CLEAR fEnemy_State
+
+> _		_		EQ fLOC B_ARANA_BLANCA
+                LET fHP_Enemy 40
+                ; Añado el nivel 2 veces
+                ADD fLevel fHP_Enemy 
+				MES "a Araña blanca"
+> _		_		EQ fLOC B_BEARSERKER
+                LET fHP_Enemy 30
+                ; Añado el nivel 2 veces
+                ADD fLevel fHP_Enemy 
+				MES " Bearserker"
+> _		_		EQ fLOC B_CAPATAZ_TROLL
+                LET fHP_Enemy 12
+				MES " Capataz troll"
+                 ; SiLLEVAS EL LODO, es pacífico
+                EQ fState EMBARRADO
+                LET fEnemy_State PACIFIC
+> _		_		EQ fLOC B_ENGENDRO
+                LET fHP_Enemy 9 ; Original 14
+				MES " Engendro"
+; gigante de hielo.
+> _		_		EQ fLOC B_GIGANTE_DE_HIELO
+                LET fHP_Enemy 20
+				MES " Gigante de hielo"
+                ; Si liberaste al gigante, es pacífico
+                EQ fGigante_Liberado ABIERTO
+                LET fEnemy_State PACIFIC
+
+> _		_		EQ fLOC B_GIGANTE_DE_HIELO
+                AT 44
+                LET fEnemy_State PACIFIC
+;
+> _	    _		
+	    EQ fLOC B_GOLEM_DE_HIELO
+        LET fHP_Enemy 15
+	    MES " Golem de hielo"
+				
+> _		_		EQ fLOC B_SIRVIENTE_DE_NIEVE
+                LET fHP_Enemy 8 ; 7
+				MES " Sirviente de nieve"
+
+
+> _		_		EQ fLOC B_POSEIDO
+                LET fHP_Enemy 3
+				MES " Poseído"
+> _		_		EQ fLOC B_POSEIDO_2
+                LET fHP_Enemy 3
+				MES " Poseído"
+> _		_		EQ fLOC B_PHALANX
+                LET fHP_Enemy 95 ; 100
+				MES "a Criatura"
+> _		_		EQ fLOC B_GUARD_TRIBE1
+                LET fHP_Enemy 30 ; 35
+				MES " Fiero guerrero"
+> _		_		EQ fLOC B_UMBRA
+                LET fHP_Enemy 20 ; 25
+				MES "a guerrera llamada Umbra"
+> _		_		EQ fLOC B_CHIEF_TRIBE2
+                LET fHP_Enemy 55 ; 60
+				MES " Jefe de tribu"
+
+; Sumar el nivel
+> _     _
+                ; Añado el nivel 
+                ADD fLevel fHP_Enemy 
+
+
+> _		_		MESSAGE " aquí."
+                MES "Puntos de vida: " ; Sis e muestra 255 por pantalla hay un error
+				PRINT fHP_Enemy	; 255 is a bug."
+				; INK C_TEXTO
+                NEWLINE
+
+> _     _       EQ fEnemy_State PACIFIC
+                MESSAGE msgEnemigoTeIgnora
+				DONE 
+
+; condicones especiales s un enemigo te ataca al crearse.
+; Si estás invisible, fuera
+> _     _       EQ fState INVISIBLE
+                DONE
+
+; Si he creado el gigante guardian, fuera
+> _     _       AT 46
+                DONE
+
+; Si es un gigante, ni es pacífico, ni estás invisible, ni es el guardian
+; Te pega en cuanto te ve.
+> _     _       EQ fLOC B_GIGANTE_DE_HIELO
+                MESSAGE "En cuanto te ve, el gigante te golpea con su gran mano."
+                LET fPARAM0 DAÑO_GIGANTE_HOSTIL
+				LET fPARAM1 RESTAR
+                PROCESS pChange_HP
+                DONE
+
+; Vamos con el capataz
+; Si tienes el lodo puesto, fuera
+> _     _       EQ fState EMBARRADO
+                DONE
+
+> _     _       EQ fLOC B_CAPATAZ_TROLL
+                MESSAGE "El capataz te huele y te azota con su látigo." ; el aire 
+                ; Quitar vida.
+                 LET fPARAM0 DAÑO_CAPATAZ_HOSTIL
+				LET fPARAM1 RESTAR
+                PROCESS pChange_HP
+                DONE
+
+;
+;--------------------------------
+/PRO Enemy_Attacks 
+;
+
+> _     _       
+                LET fTMP0 55 ; Para el segundo ataque de Umbra
+                ; Si está pacífico, no ataca
+                EQ fEnemy_State PACIFIC
+                DONE
+
+> _     _       ; Salta el siguiente ataque sind ecir nada.
+                EQ fEnemy_State SKIP_ATTACK
+                LET fEnemy_State ACTIVE
+                DONE
+
+> _     _       ; Si está derribado, no ataca
+                EQ fEnemy_State DERRIVADO
+                MESSAGE "El enemigo intenta ponerse en pie."
+                LET fEnemy_State DERRIVADO_2
+                DONE
+
+> _     _       ; Ha estado derribado, ya se ha levantado
+                EQ fEnemy_State DERRIVADO_2
+                LET fEnemy_State ACTIVE
+                DONE
+
+> _		_		
+				CLEAR fPARAM2
+				; CLEAR fTMP1
+				LET fPARAM0 ENEMY
+                NEWLINE
+
+;; Araña
+> _		_		EQ fLOC B_ARANA_BLANCA
+				MES "La Araña blanca"
+				LET fPARAM1 20
+				LET fTMP2 6 ; Por si impacta
+; Bearserker
+> _		_		EQ fLOC B_BEARSERKER
+				MES "El Bearserker"
+				LET fPARAM1 30
+				LET fTMP2 7 ; 8 ; Por si impacta
+; Capataz
+> _		_		EQ fLOC B_CAPATAZ_TROLL
+				MES "El Capataz troll"
+				LET fPARAM1 5
+				LET fTMP2 4 ; Por si impacta
+; Engendro
+> _		_		EQ fLOC B_ENGENDRO
+				MES "El Engendro"
+				LET fPARAM1 30
+				LET fTMP2 3 ; Por si impacta
+; Gigante
+> _		_		EQ fLOC B_GIGANTE_DE_HIELO
+				MES "El Gigante de hielo"
+				LET fPARAM1 20
+				LET fTMP2 7 ; Por si impacta
+; Golem
+> _	    _		
+        EQ fLOC B_GOLEM_DE_HIELO
+        MES "El Golem de hielo"
+        LET fPARAM1 10
+        LET fTMP2 4 
+				
+				
+; Sirviente
+> _		_		EQ fLOC B_SIRVIENTE_DE_NIEVE
+				MES "El Sirviente de nieve"
+				LET fPARAM1 0
+				LET fTMP2 3 ; Por si impacta
+
+
+; Poseído
+> _		_		EQ fLOC B_POSEIDO
+				MES "El Poseído"
+				LET fPARAM1 5
+				LET fTMP2 2 ; Por si impacta
+; Poseído
+> _		_		EQ fLOC B_POSEIDO_2
+				MES "El Poseído"
+				LET fPARAM1 5
+				LET fTMP2 3 ; Por si impacta
+
+; Enemigos especiales
+
+; Criatura
+> _		_		EQ fLOC B_PHALANX
+				MES "La criatura"
+				LET fPARAM1 10 ; Ataque
+				LET fTMP2 7 ; Por si impacta
+; Guerrero
+> _		_		EQ fLOC B_GUARD_TRIBE1
+				MES "El fiero guerrero"
+				LET fPARAM1 20
+				LET fTMP2 5 ; Por si impacta
+
+; Umbra
+$ataque_umbra
+> _		_		EQ fLOC B_UMBRA
+				MES "Umbra"
+				LET fPARAM1 30 ; Antes 40
+				LET fTMP2 5 ; Por si impacta
+; Jefe
+> _		_		EQ fLOC B_CHIEF_TRIBE2
+				MES "El jefe de la tribu"
+				LET fPARAM1 20
+				LET fTMP2 7 ; Por si impacta
+
+
+; Común
+>	_		_	
+				MES " te ataca"
+				PROCESS pAttack_Roll
+				
+> _		_		ZERO fRETURN1
+				MESSAGE " y falla."
+				
+; Común
+> _		_		NOTZERO fRETURN1
+				MESSAGE "."
+				COPYBF fPARAM0 fTMP2
+				LET fPARAM1 RESTAR
+				PROCESS pChange_HP
+
+; Si es Umbra ataca dos veces
+> _     _
+                ; Segundo ataque de Umbra
+                EQ fLOC B_UMBRA
+                EQ fTMP0 55
+                CLEAR fTMP0
+                SKIP $ataque_umbra
+                DONE
+
+; Si es el jefe de la tribu , la cabaña está en llamas
+> _     _
+                EQ fLOC B_CHIEF_TRIBE2
+                ; ANYKEY
+                NEWLINE 
+                MESSAGE "La choza está llena de humo y es imposible respirar."
+                
+                ; 3 PUNOS MENOS DE VIDA PARA EL JUGADOR
+                LET fPARAM0 3
+				LET fPARAM1 RESTAR
+				PROCESS pChange_HP
+
+                ; 3 puntos menos de vida para el jefe.
+                LET fPARAM0 DIRECT_DAMAGE
+				LET fRETURN0 3
+				PROCESS Damage_Enemy
+                CLEAR fPARAM0
+                CLEAR fPARAM1
+                DONE
+
+> _     _
+                CLEAR fTMP0
+                DONE
+    
+;-------------------------------------------------
+;
+/PRO Player_Attacks
+; PARAM0 Y PARAM2 se usan internamente para otras llamadas
+; PARAM1 un extra al ataque que se le pasa a la tira.a
+; Si no hay extra limpia este parámetro antes de llamar.
+; Ya he comprobado que hay un enemigo.
+; El ensaje ya lo ha puesto el verbo.
+> _     _
+            LT fLOC LAST_ENEMY; NO hay un enemigo
+			SYSMESS NoEnemy 
+            DONE
+
+> _     _
+            ; Si el enemigo está pacífico se activa
+            EQ fEnemy_State PACIFIC
+            LET fEnemy_State ACTIVE
+
+; Si atacas con la hoja y el enemigo es un golem la hoja se rompe
+> _     _
+            EQ fWeapon oHoja
+            EQ fLOC B_GOLEM_DE_HIELO
+            MESSAGE "Cuando la hoja golpea al golem, se quiebra y queda inservible."
+            ; Quitar objeto
+            DESTROY oHoja
+            ; Equipar maza
+            LET fWeapon oMaza
+            ; Devolvemos lo mismo que si hubieras fallado.
+            CLEAR fRETURN1
+			DONE
+
+> _		_
+			LET fPARAM0 PLAYER
+			; COPYBF fPARAM1 fStrenght ; Ya lo hace el método
+			PROCESS Enemy_Defense ; Devuelve la defensa del enemigo en return 0
+			COPYBF fPARAM2 fRETURN0
+			PROCESS pAttack_Roll
+			
+> _		_
+			ZERO fRETURN1
+			SYSMESS sysFallas 
+            CLEAR fRETURN1
+			DONE
+			
+> _		_
+			NOTZERO fRETURN1
+			PROCESS Damage_Enemy
+            CLEAR fRETURN1
+			DONE
+
+
+;--------------------------------
+; No params
+; fRETURN0 defense of the enemy in fLOC
+/PRO Enemy_Defense 
+
+> _		_		
+				CLEAR fRETURN0
+
+; Araña
+> _		_		EQ fLOC B_ARANA_BLANCA
+				LET fRETURN0 70
+				DONE
+; Bearserker
+> _		_		EQ fLOC B_BEARSERKER
+				LET fRETURN0 40
+				DONE
+; Capataz
+> _		_		EQ fLOC B_CAPATAZ_TROLL
+				LET fRETURN0 50
+				DONE
+; Engendro
+> _		_		EQ fLOC B_ENGENDRO
+				LET fRETURN0 40
+				DONE
+; Gigante
+> _		_		EQ fLOC B_GIGANTE_DE_HIELO
+				LET fRETURN0 40
+				DONE
+; Golem
+> _    _		
+        EQ fLOC B_GOLEM_DE_HIELO
+        LET fRETURN0 40
+        DONE
+		
+; Sirviente
+> _		_		EQ fLOC B_SIRVIENTE_DE_NIEVE
+				LET fRETURN0 30
+				DONE
+
+; Poseído
+> _		_		EQ fLOC B_POSEIDO
+				LET fRETURN0 40
+				DONE
+; Poseído
+> _		_		EQ fLOC B_POSEIDO_2
+				LET fRETURN0 40
+				DONE
+
+; enemigos especiales
+; Criatura
+> _		_		EQ fLOC B_PHALANX
+				LET fRETURN0 40
+				DONE
+; Guerrero
+> _		_		EQ fLOC B_GUARD_TRIBE1
+				LET fRETURN0 60
+				DONE
+; Jefe
+;> _		_		EQ fLOC B_CHIEF_TRIBE1
+;				LET fRETURN0 70
+;				DONE
+; Umbra
+> _		_		EQ fLOC B_UMBRA
+				LET fRETURN0 70
+				DONE
+; Jefe
+> _		_		EQ fLOC B_CHIEF_TRIBE2
+				LET fRETURN0 60
+				DONE
+
+>	_		_	
+				MESSAGE "Defense error "
+                DONE
+
+;--------------------------------
+; fRETURN0 devuelve eld año del arma en fWeapon
+;
+/PRO Weapon_Damage
+
+> _     _        EQ fWeapon oAncla
+                LET fRETURN0 10 ; Antes 10
+                DONE
+> _     _        EQ fWeapon oCuchillo
+                LET fRETURN0 5
+                DONE
+> _     _        EQ fWeapon oDaga
+                LET fRETURN0 2
+                DONE
+> _     _        EQ fWeapon oHoja
+                LET fRETURN0 7 ; Antes 5
+                DONE
+> _     _        EQ fWeapon oLatigo
+                LET fRETURN0 3
+                DONE
+> _     _        EQ fWeapon oMaza
+                LET fRETURN0 3
+                DONE
+> _     _        EQ fWeapon oMartillo
+                LET fRETURN0 6
+                DONE
+> _     _        EQ fWeapon oPico
+                LET fRETURN0 5
+                DONE
+
+
+;------------------------------
+;
+/PRO Damage_Enemy ; 25
+; PARAM0 == DIRECT_DAMAGE es que esta en fRETURN0 el dañoa  aplicar.
+; PARAM3 tiene un extra de daño. Si no lo avs a usar asegurrate de que es 0
+; Daño base del arma
+
+> _     _       
+                CLEAR fRETURN0
+                EQ fPARAM0 DIRECT_DAMAGE ; Si es direct_damage ya está en freturn en laño a aplicar
+                SKIP $aplicar_daño
+> _		_
+                
+				PROCESS Weapon_Damage
+				; En return0 tienes el daño de la arma.
+                ; Sumar las fuerza
+                ; ADD fStrenght fRETURN0 ; Coge la fuerza del jugador
+                ADD fPARAM3 fRETURN0 ; Coge la fuerza del jugador
+                CLEAR fPARAM3
+                CLEAR fTMP0
+				
+
+; Poner aquí las condiciones de daño especiales
+; E ir sumando daño a fRETURN0
+
+
+; Látigop de fuego a trolls
+> _         _
+                ; El arma es latigo de fuego
+                EQ fWeapon oLatigo
+                ; El enemigo es Troll
+                EQ fLOC B_CAPATAZ_TROLL
+                ; Sumo extra de daño +6
+                PLUS fRETURN0 6
+
+; Pico a Goelms de hueilo
+; Los mata de dos golpes en vez de en tres golpes.
+> _         _
+                ; El arma es 
+                EQ fWeapon oPico
+                ; El enemigo es 
+                EQ fLOC B_GOLEM_DE_HIELO
+                ; Sumo extra de daño
+                PLUS fRETURN0 3
+
+
+; Hoja a enemigos humanos
+> _     _
+                EQ fWeapon oHoja
+                ; El enemigo es humano espècial
+                GT fLOC B_POSEIDO_2
+                LT fLOC B_NEXT_ENEMY
+                ; Sumo extra de daño +6
+                PLUS fRETURN0 6
+
+; Daga a Phalanx
+> _     _
+                EQ fWeapon oDaga
+                ; El enemigo es Phalanx
+                EQ fLOC B_PHALANX
+                ; Sumo nivel (x2 es demasiado porque tiene saltar)
+                ADD fLevel fRETURN0 
+
+; Enemigo derribado
+> _     _
+                EQ fEnemy_State DERRIVADO_2
+                PLUS fRETURN0 DAÑO_DERRIBADO
+
+; Muestra el daño del jugador 
+> _		_		
+				MES "Golpeas causando "
+				PRINT fRETURN0
+				MESSAGE " puntos de daño."
+
+$aplicar_daño
+> _     _
+				SUB fRETURN0 fHP_Enemy
+				
+> _		_		
+				ZERO fHP_Enemy ; Enemigo muerto
+				; Si está muerto limpiamos su bandera para que no vuelva a aparecer
+				ZERO fHP_Enemy
+				PROCESS Dead_Enemy
+				DONE
+				
+> _		_
+				MES "El enemigo tiene "
+				PRINT fHP_Enemy
+				MESSAGE " puntos de vida.#n"
+				DONE
+
+;--------------------------------
+; No params
+; Nunca llamar si no hay un enemigo
+; porque pone fLOC a 0.
+/PRO Dead_Enemy ; 26
+
+; Limpio los acumulados
+> _     _
+                CLEAR fAC_ENEMY
+                CLEAR fAC_PLAYER
+
+; Araña
+> _		_		EQ fLOC B_ARANA_BLANCA
+                SYSMESS sysyYouDefeated
+                MESSAGE " la Araña blanca."
+				LET fPARAM0 90
+				PROCESS pAdd_PX
+				CREATE oMartillo 
+				MESSAGE "Encuentras un martillo de herrero."
+				; DONE
+
+; Bearserker
+> _		_		EQ fLOC B_BEARSERKER
+                                SYSMESS sysyYouDefeated
+
+                MESSAGE "l Bearserker."
+				LET fPARAM0 75 ; 80
+				; PROCESS pAdd_PX
+				;DONE
+; Capataz
+> _		_		EQ fLOC B_CAPATAZ_TROLL
+                SYSMESS sysyYouDefeated
+                MESSAGE "l Capataz troll."
+				LET fPARAM0 15
+				
+; Engendro
+> _		_		EQ fLOC B_ENGENDRO
+                SYSMESS sysyYouDefeated
+                MESSAGE "l Engendro."
+				LET fPARAM0 25
+				
+; Gigante
+> _    _		
+        EQ fLOC B_GIGANTE_DE_HIELO
+        SYSMESS sysyYouDefeated
+        MESSAGE "l Gigante de hielo."
+        LET fPARAM0 35
+				
+				
+; Golem
+> _		_		EQ fLOC B_GOLEM_DE_HIELO
+                SYSMESS sysyYouDefeated 
+                MESSAGE "l Golem de hielo."
+				LET fPARAM0 25 ; 18
+                AT 116 ; Es el de la mina.
+                CREATE oHoja 
+				MESSAGE "Encuentras una hoja delgada."
+
+; Sirviente
+> _		_		EQ fLOC B_SIRVIENTE_DE_NIEVE
+                SYSMESS sysyYouDefeated
+
+                MESSAGE "l Sirviente de nieve."
+				LET fPARAM0 6
+
+; Poseído
+> _		_		EQ fLOC B_POSEIDO
+                SYSMESS sysyYouDefeated 
+
+                MESSAGE "l Poseído."
+				LET fPARAM0 10
+                EQ fPossesed ABIERTO
+                PLUS fDead_Posesed 1
+				;DONE
+                ; compruea si estamos en la misión y los hemos matado a todos
+                PROCESS CXheck_Possesed_Mission ; Esta comprobación nos ería en la aldea? No gano mucho haciéndolo
+; Poseído
+> _		_		EQ fLOC B_POSEIDO_2
+                SYSMESS sysyYouDefeated 
+                MESSAGE "l Poseído."
+				LET fPARAM0 10
+				; PROCESS pAdd_PX
+                ; Cuando matamos un poseido 2, reiniciamos todos
+                PROCESS Set_Arbustos_Enemies
+                ; Sumar uno para la misiones
+                EQ fPossesed ABIERTO
+                PLUS fDead_Posesed 1
+                ; compruea si estamos en la misión y los hemos matado a todos
+                PROCESS CXheck_Possesed_Mission 
+
+;--- Enemigos especiales
+
+; Criatura
+> _		_		EQ fLOC B_PHALANX
+                SYSMESS sysyYouDefeated 
+
+                MESSAGE " la criatura."
+				LET fPARAM0 1
+				PROCESS pAdd_PX
+                MESSAGE "La criatura cae pesadamente sobre la nieve."
+                MESSAGE "Deja de gritar y retorcerse mientras se vacía de sangre negra y espesa."
+                MESSAGE "Ya no  las risas invisibles. Tu tribu descansa en paz." 
+                ANYKEY
+                PROCESS Show_Ending
+				DONE
+; Guerrero
+> _		_		EQ fLOC B_GUARD_TRIBE1
+                SYSMESS sysyYouDefeated 
+                MESSAGE "l fiero guerrero."
+                ; Ahora puedes quedarte con su hacha."
+				LET fPARAM0 70
+				PROCESS pAdd_PX
+                NEWLINE
+                MESSAGE "La tribu grita cuando ve que su guardián no se levanta. Un búho blanco vuela en círculos."
+                MESSAGE "El jefe se arrodilla ante ti y rompe su lanza de pesca. La tribu es tuya."
+                MESSAGE "Los pescadores te juran lealtad y se arrancan la piel con sus antiguos tatuajes."
+                MESSAGE "Una vez que has hecho tu voluntad, vuelves al desierto blanco." ;  en la tribu
+                ANYKEY
+            LET fLOC_Aldea_Paso TRIBE_DESTROYED
+            ; Cuenta como misión hecha
+            PLUS fMissiñons_Done 1
+            GOTO 24 ; Te saco fuera de la aldea dónde no podrás volver.
+                RESTART
+
+; Umbra
+> _		_		EQ fLOC B_UMBRA
+                SYSMESS sysyYouDefeated
+
+                MESSAGE " Umbra."
+				LET fPARAM0 95
+				PROCESS pAdd_PX
+
+                 GOTO 137
+				;DONE
+                ; Texto
+                NEWLINE
+                MESSAGE "Entras en la aldea."
+                MESSAGE "La tribu forma un pasillo hacia la choza del jefe mientras gritan una palabra." ; todos la misma
+                MESSAGE "Conoces esa palabra, fuego." ; Cuando entras en la choza rRecuerdas que c
+                MESSAGE "El jefe te espera. Sus brazos están cubiertos de fuego y pronto toda la choza está envuelta en llamas." ;                 ANYKEY
+                RESTART
+
+; Jefe
+> _		_		EQ fLOC B_CHIEF_TRIBE2
+                SYSMESS sysyYouDefeated
+
+                MESSAGE "l jefe de la tribu."
+				LET fPARAM0 95
+				PROCESS pAdd_PX
+               ; ------
+        
+                NEWLINE
+            MESSAGE "Atraviesas la pared de la choza y ruedas por la nieve. "
+            MESSAGE "Escuchas gritos. Te levantas y ves a hombres, mujeres y niños correr hacia la choza de su jefe. Quieren morir con él mientras el fuego aún crepita. Respetas su valor."
+            MESSAGE "Otros se han quedado sin saber qué hacer, como cuencos vacíos, fáciles de romper."
+            MESSAGE "No se volverá a hablar más de la tribu de la escama, salvo para contar la historia de cómo la aniquilaste."
+          
+            ANYKEY
+            ; Indoicamos que no hemos hecho la misión, sinod estruido a la tribu
+            LET fBox TRIBE_DESTROYED
+            ; Cuenta como misión hecha
+            PLUS fMissiñons_Done 1
+            GOTO 68 ; Te saco fuera de la aldea dónde no podrás volver.
+            RESTART
+
+
+; fLOIC a 0				
+> _     _       PROCESS pAdd_PX ; Suma PX
+                LET fPARAM0 CLEAR_FLAG ; pONE A CERO ESTA BANDERA
+				PROCESS pSetGet_Flag_Loc 
+                ; Suma 1 al número de enemigos muertos
+                PLUS fEnemy_Deads 1
+                DONE
+
+
+;---------------------------
+;
+/PRO Set_Arbustos_Enemies
+
+> _     _
+            LET 96 ARBUSTOBAYA
+            LET 108 ARBUSTOBAYA
+            LET 130 ARBUSTOBAYA
+            LET 166 ARBUSTOBAYA
+
+            
+                LET 77 B_SIRVIENTE_DE_NIEVE
+                LET 78 B_GOLEM_DE_HIELO
+                LET 104 B_SIRVIENTE_DE_NIEVE
+                LET 105 B_GOLEM_DE_HIELO
+                LET 109 B_SIRVIENTE_DE_NIEVE
+                LET 114 B_GIGANTE_DE_HIELO
+                LET 115 B_GIGANTE_DE_HIELO
+               
+                LET 117 B_GIGANTE_DE_HIELO
+                LET 119 B_GIGANTE_DE_HIELO
+                LET 120 B_GIGANTE_DE_HIELO
+                LET 121 B_GIGANTE_DE_HIELO
+                LET 122 B_GIGANTE_DE_HIELO
+                ; LET 124 B_GOLEM_DE_HIELO
+                LET 158 B_POSEIDO
+                LET 159 B_POSEIDO
+                LET 160 B_POSEIDO
+                LET 161 B_POSEIDO
+                LET 163 B_POSEIDO_2
+                LET 164 B_POSEIDO_2
+                LET 209 B_POSEIDO_2
+                LET 178 B_CAPATAZ_TROLL
+        LET 179 B_CAPATAZ_TROLL
+        LET 182 B_CAPATAZ_TROLL
+        LET 185 B_CAPATAZ_TROLL
+        LET 186 B_GOLEM_DE_HIELO 
+        DONE
+
+;-------------------------------------------
+; Ya he comprobado que hay un enemigo.
+;
+/PRO Player_Charge
+
+> _     _
+            LT fLOC LAST_ENEMY; NO hay un enemigo
+			SYSMESS NoEnemy 
+            DONE
+
+> _     _
+            EQ fEnemy_State DERRIVADO_2
+            MESSAGE "Aún no." ;  puedes volver a cargar
+            DONE
+
+> _     _
+            CLEAR fTMP0
+            ; EQ fState EN
+
+; Criaturas que puedes cargar
+
+> _     _
+            EQ fLOC B_CAPATAZ_TROLL
+            LET fTMP0 98
+
+> _     _
+            EQ fLOC B_ENGENDRO
+            LET fTMP0 98
+
+> _     _
+            EQ fLOC B_POSEIDO
+            LET fTMP0 98
+
+> _     _
+            EQ fLOC B_POSEIDO_2
+            LET fTMP0 98
+
+> _     _
+            EQ fLOC B_SIRVIENTE_DE_NIEVE
+            LET fTMP0 98
+
+; Enemigos únicos que puedes derribar
+
+> _     _
+            EQ fLOC B_GUARD_TRIBE1
+            LET fTMP0 98
+
+;> _     _
+;            EQ fLOC B_CHIEF_TRIBE1
+;            LET fTMP0 98
+
+; Resolver la carga
+> _     _
+            EQ fTMP0 98
+            MESSAGE "Cargas contra el enemigo y lo derribas."
+            LET fEnemy_State DERRIVADO
+            CLEAR fTMP0
+            DONE
+
+; Efectos especiales
+
+> _     _       ; Gigante. Te atrapa y te golpea conta el suelo.
+            ; NO: Vuelas varios metros hasta que aterrizas en el suelo de espaldas.
+            EQ fLOC B_GIGANTE_DE_HIELO
+            MESSAGE "Cargas, pero rebotas y caes al suelo." ; con todas tus fuerzas ;  contra gigante
+            MESSAGE "El gigante te agarra, te levanta y te aplasta brutalmente contra el suelo." ; de una pierna
+            
+            LET fPARAM0 DAÑO_AGARRE_GIGANTE
+            LET fPARAM1 RESTAR
+            PROCESS pChange_HP
+
+            ; Ponemos este estado para evitar dos ataques seguidos.
+            LET fEnemy_State SKIP_ATTACK
+            DONE
+
+; Resultado por defecto
+> _     _
+            MESSAGE "Cargas contra el enemigo, pero no lo derribas." ; El choque es brutal pero no logras derribarle.
+            DONE
+
+;-----------------------------
+; No tiene en cuenta ningún estado del enemigo.
+; Es decir, puedes decapitar a un enemigo que hayas derribado.
+;
+/PRO Player_Decapitate
+
+> _     _
+            LT fLOC LAST_ENEMY; NO hay un enemigo
+			SYSMESS NoEnemy 
+            DONE
+
+; Ceck if enemy is decapitable
+
+> _     _   EQ fLOC B_CAPATAZ_TROLL
+            PROCESS Dead_Enemy
+            DONE
+
+> _     _   EQ fLOC B_ENGENDRO
+            PROCESS Dead_Enemy
+            DONE
+
+> _     _   EQ fLOC B_SIRVIENTE_DE_NIEVE
+            PROCESS Dead_Enemy
+            DONE
+
+> _     _   EQ fLOC B_POSEIDO
+            PROCESS Dead_Enemy
+            DONE
+
+> _     _   EQ fLOC B_POSEIDO_2
+            PROCESS Dead_Enemy
+            DONE
+
+; Enemigos únicos decapitables
+
+> _     _   EQ fLOC B_GUARD_TRIBE1
+            PROCESS Dead_Enemy
+            DONE
+
+> _     _   EQ fLOC B_UMBRA
+            PROCESS Dead_Enemy
+            DONE
+
+; Repsuestas especiales para los que no sond ecapitables
+
+> _     _   EQ fLOC B_ARANA_BLANCA
+            
+            MESSAGE "La araña salta sobre ti y te atraviesa con sus patas." ;te atraviesa con sus patas al caer.
+            LET fPARAM0 DAÑO_DECAPITACION_ARAÑA
+            LET fPARAM1 RESTAR
+            PROCESS pChange_HP
+            ; Ponemos este estado para evitar dos ataques seguidos.
+            LET fEnemy_State SKIP_ATTACK
+
+            DONE
+
+; Respuesta genérica
+> _     _   
+            SYSMESS sysFallas
+            DONE
+
+
+;-----------------------------
+; Devuelve en fPARAM1 un extra a sumar ala taque
+; Devuelve en fPARAM3 un extra a sumar al dsño.
+; También ignoramos todos los estados del enemigo
+; fRETURM 0 se hace el ataque, otro valor nos e hace
+/PRO Player_Jumps
+
+; Se comprueba en la llamada de ataque que hay un enemigo
+> _     _   
+            CLEAR fRETURN0
+            LT fLOC LAST_ENEMY; NO hay un enemigo
+			SYSMESS NoEnemy 
+            SET fRETURN0
+            DONE
+
+
+; Gigante
+> _     _
+            EQ fLOC B_GIGANTE_DE_HIELO
+            LET fPARAM1 EXTRA_ATTACK_GIGANT ; Se sumará
+            LET fPARAM3 EXTRA_damage_GIGANT
+            SYSMESS sysSaltasYGolpeas
+            ; fRETURN0 es 0
+            DONE
+
+; Bearserker
+> _     _
+            EQ fLOC B_BEARSERKER
+            LET fPARAM1 EXTRA_ATTACK_GIGANT ; Se sumará
+            LET fPARAM3 EXTRA_damage_GIGANT ; Mismo bonus que a un gigante.
+            
+            SYSMESS sysSaltasYGolpeas
+            ; fRETURN0 es 0
+            DONE
+
+; Phalanx
+> _     _
+            EQ fLOC B_PHALANX
+            LET fPARAM1 EXTRA_ATTACK_PHALAX ; Se sumará
+            LET fPARAM3 EXTRA_damage_PHALAX
+            SYSMESS sysSaltasYGolpeas
+            ; fRETURN0 es 0
+            DONE
+
+; Los que te hacen contragolpe
+> _     _
+            EQ fLOC B_ARANA_BLANCA
+            SET fRETURN0
+
+> _     _
+            EQ fLOC B_CHIEF_TRIBE2
+            SET fRETURN0
+
+
+; Respuesta genérica contragolpe
+> _     _   
+            EQ fRETURN0 255
+            MESSAGE "Tu enemigo aprovecha el salto para contratacar."
+            LET fPARAM0 DAÑO_FALLO_SALTO
+            LET fPARAM1 RESTAR
+            PROCESS pChange_HP
+            DONE        
+
+; Respuesta genérica
+> _     _   
+            MESSAGE "Tu enemigo esquiva el golpe."
+            ; Nos e ataca
+            SET fRETURN0
+            DONE        
+
+
+;---------------------------------------
+;
+/PRO The_End
+
+; No ahorras espacio cmabiando los NEWLINE por #n
+> _     _
+            ;CLS
+            NEWLINE
+
+> _     _
+            ZERO fEnemy_Deads
+            MESSAGE "No has matado a nadie." ; Logro conseguido. acifista. 
+
+> _     _   NOTZERO fEnemy_Deads
+            MES "Has derrotado a "
+            PRINT fEnemy_Deads
+            MESSAGE " enemigos."
+
+> _     _   
+            NEWLINE
+            MES "Final "
+            EQ fPARAM0 1
+            MESSAGE "blanco."
+> _     _   
+            ZERO fPARAM0
+            MESSAGE "rojo."
+
+> _     _
+                MESSAGE "#n#nEpic Adventures volverá con El Bosque en LLamas."
+                NEWLINE
+                NEWLINE
+            END
+    
+;------------------------------
+; compruea si estamos en la misión y los hemos matado a todos
+; Si cmabias las loc de aparicioens de los psoediso, hay que cmabiar esto tmabién.
+; No aparam, no return
+;
+/PRO CXheck_Possesed_Mission 
+
+> _     _
+             GT fDead_Posesed Dead_Posesed_Limit ; Has matado suficientes poseidos
+            SET fDead_Posesed ; Lo ponemos a 255
+            ; Si hemos cumplido la misión quitamos los poseidos
+            CLEAR 158
+                CLEAR 159
+                CLEAR 160
+                CLEAR 161
+                CLEAR 163
+                CLEAR 164
+                CLEAR 209
+            EQ fPossesed ABIERTO ; EstoHace falta comprobarlo
+            LET fPossesed CERRADO
+            
+            DONE
+
+;-------------------------------------
+/PRO Set_WolfPack
+
+> _     _
+            DONE
+
+
+;-------------------------------------------
+;
+/PRO Historia_Hermano
+
+> _     _
+            NEWLINE
+            MESSAGE "Fue una señal de vuestro dios que dos niños sanos nacieran el mismo día y sobrevivieran. Ambos fuisteis criados como hermanos."
+                                  
+            MESSAGE "Tú destacaste con las armas. Tu hermano, sin tu talento, se unió a una partida de caza." ;tuvo que unirse
+            MESSAGE "Cuando la partida volvió, acusaron a tu hermando de cobarde." ; tu hermano fue 
+                   
+            MESSAGE "Para probar que no lo era, tu hermano recorrió el paso."
+            MESSAGE "La nieve no aguantó su peso."
+            DONE
+
+;----------------------------------------------------------
+; Decide el final y te muestra el texto.
+;
+/PRO Show_Ending
+
+> _     _
+            CLS
+            CLEAR fPARAM0
+
+            ; Final blanco
+            EQ fBox MISSION_DONE
+            EQ fPossesed MISSION_DONE
+            EQ fLOC_Aldea_Paso MISSION_DONE
+            MESSAGE "Cruzas una vez más el desierto blanco."
+            MESSAGE "Encuentras el rastro de los sin tribu y los conduces a dónde les alimentan y a dónde los calientan."
+            MESSAGE "Olvidáis los nombres de las tribus. Sois la tribu más grande que nunca pisó la nieve."
+            MESSAGE "Los chamanes añaden nuevos tatuajes para que os reconozcáis como hermanos, mientras un búho blanco os contempla desde la distancia."
+            MESSAGE "Las risas callan."
+            LET fPARAM0 1
+            ; ANYKEY
+
+; Este es el final por defecto.
+> _     _
+            ZERO fPARAM0
+            MESSAGE "Tu líder y toda tu tribu ha muerto. Ya no estás sujeto a su obediencia."
+            MESSAGE "Has unido las tribus bajo un mando carmesí. Mientras tu mano sujete firmemente tu arma serás jefe."
+            MESSAGE "Este no es el final, es un paso más en un camino eterno. Siempre habrá otro hijo sin padre que te desafíe o el rastro de otra tribu."
+            MESSAGE "Vuelves a escuchar las risas."
+
+> _     _
+            ANYKEY
+            PROCESS The_End
+            DONE
+/END
